@@ -10,7 +10,8 @@ class CivicsDataLoader {
     do {
       let data = try Data(contentsOf: url)
       let decoded = try JSONDecoder().decode(CivicsData.self, from: data)
-      return decoded.sections.flatMap { $0.subsections.flatMap { $0.questions } }
+      let questions = decoded.sections.flatMap { $0.subsections.flatMap { $0.questions } }
+      return questions.sorted { $0.id < $1.id }
     } catch {
       print("Failed to decode JSON: \(error)")
       return []

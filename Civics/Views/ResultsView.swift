@@ -1,25 +1,54 @@
 import SwiftUI
 
 struct ResultsView: View {
-  let correct: Int
-  let incorrect: Int
-  let onDismiss: () -> Void  // Closure to notify parent
+  var vm: GameViewModel
+  var onCompleted: () -> Void = {}
 
   var body: some View {
-    VStack(spacing: 20) {
-      Text("Results")
-        .font(.largeTitle)
+    ZStack {
+      Color.purple.ignoresSafeArea()
 
-      Text("Correct: \(correct)")
-      Text("Incorrect: \(incorrect)")
+      VStack(spacing: 30) {
+        let correctCount = vm.responses.count(where: \.correct)
+        Text("You got \(correctCount) questions!")
+          .font(.largeTitle)
+          .foregroundStyle(.white)
+          .padding(.top)
 
-      Button("Back to Start") {
-        onDismiss()  // Call closure
+        ScrollView(.vertical) {
+          VStack(spacing: 16) {
+            ForEach(vm.responses, id: \.question) { item in
+              let (question, correct) = item
+              Text(question)
+                .font(.title2)
+                .foregroundColor(correct ? .white : .white.opacity(0.5))
+                .multilineTextAlignment(.center)
+            }
+          }
+          .padding([.top, .bottom])
+          .frame(maxWidth: .infinity)
+        }
+        .background(.blue.opacity(0.25))
+
+        Button("Play again") {
+          onCompleted()
+        }
+        .font(.title2)
+        .bold()
+        .background(.blue)
+        .foregroundStyle(.white)
+        .padding()
       }
-      .padding()
-      .font(.title2)
     }
-    .padding()
-    .frame(minWidth: 300, minHeight: 200)
   }
+}
+
+#Preview {
+  let vm = GameViewModel()
+
+  vm.respond(true)
+  vm.respond(true)
+  vm.respond(false)
+
+  return ResultsView(vm: vm)
 }

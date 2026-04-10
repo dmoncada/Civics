@@ -8,15 +8,16 @@ class CongressMembersViewModel {
   var isLoading = false
 
   func load(state: UnionState) async {
+    defer { isLoading = false }
+    isLoading = true
+
     do {
-      defer { isLoading = false }
-      isLoading = true
-
       let service = CongressService.shared
-      let (senators, representatives) = try await service.fetchMembers(for: state)
+      async let task1 = service.fetchSenators(for: state)
+      async let task2 = service.fetchRepresentatives(for: state)
 
-      self.senators = senators
-      self.representatives = representatives
+      senators = try await task1
+      representatives = try await task2
 
     } catch {
       print(error)

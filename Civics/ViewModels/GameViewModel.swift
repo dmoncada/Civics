@@ -1,60 +1,67 @@
-import Combine
-import Foundation
 import SwiftUI
 
-enum GameState {
-  case ready
-  case inProgress
-  case finished
-}
+@MainActor
+@Observable
+class GameViewModel {
+  private(set) var unionState: UnionState? = nil
+  private(set) var senators: [Senator] = []
+  private(set) var representatives: [Representative] = []
 
-class GameViewModel: ObservableObject {
-  @Published var state: GameState = .ready
-  @Published var allQuestions: [CivicsQuestion] = []
-  @Published var currentQuestion: CivicsQuestion?
-  @Published var correctCount = 0
-  @Published var incorrectCount = 0
-  @Published var timeRemaining = 60
+  private(set) var responses = [(question: String, correct: Bool)]()
 
-  private var timer: Timer?
+  private var currentIndex = 0
+  private var allQuestions: [CivicsQuestion]
 
-  func startGame(duration: Int) {
-    allQuestions = CivicsDataLoader.load().shuffled()
-    correctCount = 0
-    incorrectCount = 0
-    timeRemaining = duration
-    state = .inProgress
-    nextQuestion()
-    timer?.invalidate()
-    timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-      guard let self = self else { return }
-      if self.timeRemaining > 0 {
-        self.timeRemaining -= 1
-      } else {
-        self.endGame()
-      }
+  init() {
+    allQuestions = CivicsDataLoader.load()
+    reset()
+  }
+
+  func reset() {
+    responses = []
+    currentIndex = 0
+    allQuestions.shuffle()
+  }
+
+  func setState(_ state: UnionState) async throws {
+    if unionState == state { return }
+
+    let service = CongressService.shared
+    async let task1 = service.fetchSenators(for: state)
+    async let task2 = service.fetchRepresentatives(for: state)
+
+    senators = try await task1
+    representatives = try await task2
+    unionState = state
+  }
+
+  func respond(_ correct: Bool) {
+    responses.append((question, correct))
+    advance()
+  }
+
+  private func advance() {
+    currentIndex = (currentIndex + 1) % allQuestions.count
+  }
+
+  var question: String {
+    allQuestions[currentIndex].question
+  }
+
+  var answers: [String] {
+    let question = allQuestions[currentIndex]
+
+    switch question.id {
+    case 23:  // State's senators.
+      return senators.map(\.mediumName)
+    case 29:  // State's representatives.
+      return representatives.map(\.mediumName)
+    case 61:  // State's governor.
+      return ["Bob Ferguson"]
+    case 62:  // State's capital.
+      return [unionState!.capital]
+    default:
+      return question.answers
     }
-  }
-
-  func nextQuestion() {
-    guard !allQuestions.isEmpty else {
-      endGame()
-      return
-    }
-    currentQuestion = allQuestions.removeFirst()
-  }
-
-  func mark(correct: Bool) {
-    if correct { correctCount += 1 } else { incorrectCount += 1 }
-    nextQuestion()
-  }
-
-  func endGame() {
-    timer?.invalidate()
-    state = .finished
-  }
-
-  func resetGame() {
-    state = .ready
   }
 }

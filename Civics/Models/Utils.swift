@@ -1,3 +1,10 @@
+import SwiftUI
+
+enum AppStorageKey: String {
+    case unionState
+    case duration
+}
+
 func countdown(from start: Int) -> AsyncStream<Int> {
   AsyncStream { continuation in
     Task {

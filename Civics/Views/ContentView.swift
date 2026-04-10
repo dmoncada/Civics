@@ -1,41 +1,59 @@
 import SwiftUI
 
-struct ContentView: View {
-  @StateObject private var vm = GameViewModel()
-  @State private var selectedDuration = 60
+enum Screen: Hashable {
+  case load
+  case questions
+  case results
+}
+
+struct NavigationController: View {
+  @State private var path = NavigationPath()
+  @State private var vm = GameViewModel()
 
   var body: some View {
-    VStack {
-      switch vm.state {
-      case .ready:
-        TimerPickerView(selectedDuration: $selectedDuration)
-        Button("Start Game") {
-          vm.startGame(duration: selectedDuration)
-        }
-        .padding()
-        .font(.title2)
-
-      case .inProgress:
-        GameView(vm: vm)
-
-      case .finished:
-        GameView(vm: vm)
-          .sheet(
-            isPresented: Binding(
-              get: { vm.state == .finished },
-              set: { _ in vm.resetGame() }
-            )
-          ) {
-            ResultsView(
-              correct: vm.correctCount,
-              incorrect: vm.incorrectCount,
-              onDismiss: {
-                vm.resetGame()  // Return to main screen
-              }
-            )
-          }
+    NavigationStack(path: $path) {
+      RootView(vm: vm) {
+        path.append(Screen.load)
+      }
+      .navigationDestination(for: Screen.self) { screen in
+        screenView(for: screen)
       }
     }
-    .frame(minWidth: 400, minHeight: 500)
+    .onChange(of: path) {
+      if path.isEmpty {
+        vm.reset()
+      }
+    }
   }
+
+  @ViewBuilder
+  private func screenView(for screen: Screen) -> some View {
+    Group {
+      switch screen {
+      case .load:
+        CountdownView {
+          path.append(Screen.questions)
+        }
+      case .questions:
+        QuestionsView(vm: vm) {
+          path.append(Screen.results)
+        }
+      case .results:
+        ResultsView(vm: vm) {
+          path = NavigationPath()
+        }
+      }
+    }
+    .navigationBarBackButtonHidden()
+  }
+}
+
+struct ContentView: View {
+  var body: some View {
+    NavigationController()
+  }
+}
+
+#Preview {
+  ContentView()
 }

@@ -31,10 +31,6 @@ struct CongressMember: Decodable {
   }
 }
 
-extension CongressMember: Identifiable {
-  var id: String { bioguideId }
-}
-
 struct Senator: Identifiable {
   let id: String
   let name: String

@@ -184,7 +184,7 @@
             },
             {
               "id": 23,
-              "question": "Who is one of your state’s U.S. senators now?",
+              "question": "Who is one of your state's U.S. senators now?",
               "answers": [
                 "Answers will vary. [District of Columbia residents and residents of U.S. territories should answer that D.C. (or the territory where the applicant lives) has no U.S. senators.]"
               ]
@@ -260,7 +260,7 @@
               "id": 35,
               "question": "Some states have more representatives than other states. Why?",
               "answers": [
-                "(Because of) the state’s population",
+                "(Because of) the state's population",
                 "(Because) they have more people",
                 "(Because) some states have more people"
               ]
@@ -340,7 +340,7 @@
             },
             {
               "id": 47,
-              "question": "What does the President’s Cabinet do?",
+              "question": "What does the President's Cabinet do?",
               "answers": ["Advises the President (of the United States)"]
             },
             {
@@ -452,7 +452,7 @@
                 "Provide schooling and education",
                 "Provide protection (police)",
                 "Provide safety (fire departments)",
-                "Give a driver’s license",
+                "Give a driver's license",
                 "Approve zoning and land use"
               ]
             },
@@ -488,7 +488,7 @@
               "question": "There are four amendments to the U.S. Constitution about who can vote. Describe one of them.",
               "answers": [
                 "Citizens eighteen (18) and older (can vote).",
-                "You don’t have to pay (a poll tax) to vote.",
+                "You don't have to pay (a poll tax) to vote.",
                 "Any citizen can vote. (Women and men can vote.)",
                 "A male citizen of any race (can vote)."
               ]
@@ -634,7 +634,7 @@
               "answers": [
                 "High taxes",
                 "Taxation without representation",
-                "British soldiers stayed in Americans’ houses (boarding, quartering)",
+                "British soldiers stayed in Americans' houses (boarding, quartering)",
                 "They did not have self-government",
                 "Boston Massacre",
                 "Boston Tea Party (Tea Act)",
@@ -796,7 +796,7 @@
                 "Emancipation Proclamation",
                 "(Battle of) Vicksburg",
                 "(Battle of) Gettysburg",
-                "Sherman’s March",
+                "Sherman's March",
                 "(Surrender at) Appomattox",
                 "(Battle of) Antietam/Sharpsburg",
                 "Lincoln was assassinated."
@@ -845,7 +845,7 @@
             },
             {
               "id": 99,
-              "question": "Name one leader of the women’s rights movement in the 1800s.",
+              "question": "Name one leader of the women's rights movement in the 1800s.",
               "answers": [
                 "Susan B. Anthony",
                 "Elizabeth Cady Stanton",
@@ -930,7 +930,7 @@
             },
             {
               "id": 108,
-              "question": "Who was the United States’ main rival during the Cold War?",
+              "question": "Who was the United States' main rival during the Cold War?",
               "answers": ["Soviet Union", "USSR", "Russia"]
             },
             {
@@ -1092,16 +1092,16 @@
               "question": "What is Independence Day?",
               "answers": [
                 "A holiday to celebrate U.S. independence (from Britain)",
-                "The country’s birthday"
+                "The country's birthday"
               ]
             },
             {
               "id": 126,
               "question": "Name three national U.S. holidays.",
               "answers": [
-                "New Year’s Day",
+                "New Year's Day",
                 "Martin Luther King, Jr. Day",
-                "Presidents Day (Washington’s Birthday)",
+                "Presidents Day (Washington's Birthday)",
                 "Memorial Day",
                 "Juneteenth",
                 "Independence Day",

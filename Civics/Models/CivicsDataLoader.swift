@@ -6,6 +6,7 @@ class CivicsDataLoader {
       print("File not found.")
       return []
     }
+
     do {
       let data = try Data(contentsOf: url)
       let decoded = try JSONDecoder().decode(CivicsData.self, from: data)

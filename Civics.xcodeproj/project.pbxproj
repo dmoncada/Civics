@@ -11,10 +11,21 @@
 		DCC9BDF12F888D5F00C4263B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		DCF5D01B2F8ACC8100253974 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC5A42002EBBECCD00D52DBF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC5A42072EBBECCD00D52DBF;
+			remoteInfo = Civics;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		DC04BE272EBC18DA003863CF /* Civics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Civics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC9BDD72F883D0000C4263B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		DCF5D0172F8ACC8100253974 /* CivicsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CivicsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,10 +47,22 @@
 			path = Civics;
 			sourceTree = "<group>";
 		};
+		DCF5D0182F8ACC8100253974 /* CivicsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CivicsTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DC5A42052EBBECCD00D52DBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCF5D0142F8ACC8100253974 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -52,11 +75,21 @@
 		DC5A41FF2EBBECCD00D52DBF = {
 			isa = PBXGroup;
 			children = (
-				DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */,
-				DC04BE272EBC18DA003863CF /* Civics.app */,
 				DCC9BDD72F883D0000C4263B /* README.md */,
+				DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */,
 				DC5A420A2EBBECCD00D52DBF /* Civics */,
+				DCF5D0182F8ACC8100253974 /* CivicsTests */,
+				DCF5D0232F8AD08100253974 /* Targets */,
 			);
+			sourceTree = "<group>";
+		};
+		DCF5D0232F8AD08100253974 /* Targets */ = {
+			isa = PBXGroup;
+			children = (
+				DC04BE272EBC18DA003863CF /* Civics.app */,
+				DCF5D0172F8ACC8100253974 /* CivicsTests.xctest */,
+			);
+			path = Targets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,6 +117,29 @@
 			productReference = DC04BE272EBC18DA003863CF /* Civics.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DCF5D0162F8ACC8100253974 /* CivicsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCF5D01F2F8ACC8100253974 /* Build configuration list for PBXNativeTarget "CivicsTests" */;
+			buildPhases = (
+				DCF5D0132F8ACC8100253974 /* Sources */,
+				DCF5D0142F8ACC8100253974 /* Frameworks */,
+				DCF5D0152F8ACC8100253974 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DCF5D01C2F8ACC8100253974 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				DCF5D0182F8ACC8100253974 /* CivicsTests */,
+			);
+			name = CivicsTests;
+			packageProductDependencies = (
+			);
+			productName = CivicsTests;
+			productReference = DCF5D0172F8ACC8100253974 /* CivicsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -91,11 +147,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2610;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					DC5A42072EBBECCD00D52DBF = {
 						CreatedOnToolsVersion = 26.1;
+					};
+					DCF5D0162F8ACC8100253974 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = DC5A42072EBBECCD00D52DBF;
 					};
 				};
 			};
@@ -108,12 +168,15 @@
 			);
 			mainGroup = DC5A41FF2EBBECCD00D52DBF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DC5A41FF2EBBECCD00D52DBF;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				DC5A42072EBBECCD00D52DBF /* Civics */,
+				DCF5D0162F8ACC8100253974 /* CivicsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -128,6 +191,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DCF5D0152F8ACC8100253974 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -138,7 +208,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DCF5D0132F8ACC8100253974 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DCF5D01C2F8ACC8100253974 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC5A42072EBBECCD00D52DBF /* Civics */;
+			targetProxy = DCF5D01B2F8ACC8100253974 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		DC5A42112EBBECCF00D52DBF /* Debug */ = {
@@ -274,6 +359,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -290,7 +376,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davidmoncada.Civics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -298,7 +384,7 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -321,6 +407,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -337,7 +424,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.davidmoncada.Civics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -345,7 +432,7 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -354,6 +441,60 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.1;
+			};
+			name = Release;
+		};
+		DCF5D01D2F8ACC8100253974 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E76XSQA67L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidmoncada.CivicsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Civics.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Civics";
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		DCF5D01E2F8ACC8100253974 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E76XSQA67L;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.davidmoncada.CivicsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Civics.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Civics";
+				XROS_DEPLOYMENT_TARGET = 26.2;
 			};
 			name = Release;
 		};
@@ -374,6 +515,15 @@
 			buildConfigurations = (
 				DC5A42142EBBECCF00D52DBF /* Debug */,
 				DC5A42152EBBECCF00D52DBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCF5D01F2F8ACC8100253974 /* Build configuration list for PBXNativeTarget "CivicsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCF5D01D2F8ACC8100253974 /* Debug */,
+				DCF5D01E2F8ACC8100253974 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

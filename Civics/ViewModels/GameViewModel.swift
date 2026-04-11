@@ -3,24 +3,24 @@ import SwiftUI
 @MainActor
 @Observable
 class GameViewModel {
+  private(set) var questions: [CivicsQuestion]
+  private(set) var responses = [(question: String, correct: Bool)]()
+
   private(set) var unionState: UnionState? = nil
   private(set) var senators: [Senator] = []
   private(set) var representatives: [Representative] = []
 
-  private(set) var responses = [(question: String, correct: Bool)]()
-
   private var currentIndex = 0
-  private var allQuestions: [CivicsQuestion]
 
   init() {
-    allQuestions = CivicsDataLoader.load()
+    questions = CivicsDataLoader.load()
     reset()
   }
 
   func reset() {
-    responses = []
+    questions.shuffle()
     currentIndex = 0
-    allQuestions.shuffle()
+    responses = []
   }
 
   func setState(_ state: UnionState) async throws {
@@ -41,15 +41,20 @@ class GameViewModel {
   }
 
   private func advance() {
-    currentIndex = (currentIndex + 1) % allQuestions.count
+    currentIndex += 1
+
+    if currentIndex == questions.count {
+      questions.shuffle()
+      currentIndex = 0
+    }
   }
 
   var question: String {
-    allQuestions[currentIndex].question
+    questions[currentIndex].question
   }
 
   var answers: [String] {
-    let question = allQuestions[currentIndex]
+    let question = questions[currentIndex]
 
     switch question.id {
     case 23:  // State's senators.
@@ -59,7 +64,7 @@ class GameViewModel {
     case 61:  // State's governor.
       return ["Bob Ferguson"]
     case 62:  // State's capital.
-      return [unionState!.capital]
+      return [unionState?.capital ?? ""]
     default:
       return question.answers
     }

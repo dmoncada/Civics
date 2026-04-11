@@ -1,6 +1,6 @@
 import Foundation
 
-class CivicsDataLoader {
+struct CivicsDataLoader {
   static func load() -> [CivicsQuestion] {
     guard let url = Bundle.main.url(forResource: "civics2025", withExtension: "json") else {
       print("File not found.")

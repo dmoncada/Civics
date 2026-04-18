@@ -1,54 +1,48 @@
 import SwiftUI
 
 struct ResultsView: View {
-  var vm: GameViewModel
+  @Environment(GameViewModel.self) private var vm
+
   var onCompleted: () -> Void = {}
 
   var body: some View {
-    ZStack {
-      Color.purple.ignoresSafeArea()
-
-      VStack(spacing: 30) {
-        let correctCount = vm.responses.count(where: \.correct)
-        Text("You got \(correctCount) questions!")
-          .font(.largeTitle)
-          .foregroundStyle(.white)
-          .padding(.top)
-
-        ScrollView(.vertical) {
-          VStack(spacing: 16) {
-            ForEach(vm.responses, id: \.question) { item in
-              let (question, correct) = item
-              Text(question)
-                .font(.title2)
-                .foregroundColor(correct ? .white : .white.opacity(0.5))
-                .multilineTextAlignment(.center)
-            }
-          }
-          .padding([.top, .bottom])
-          .frame(maxWidth: .infinity)
-        }
-        .background(.blue.opacity(0.25))
-
-        Button("Play again") {
-          onCompleted()
-        }
+    VStack(spacing: 16) {
+      let correctCount = vm.responses.count(where: \.correct)
+      Text("You got \(correctCount) questions!")
         .font(.title2)
-        .bold()
-        .background(.blue)
-        .foregroundStyle(.white)
+        .fontWeight(.bold)
+
+      ScrollView(.vertical) {
+        VStack(spacing: 16) {
+          ForEach(vm.responses, id: \.question) { item in
+            let (question, correct) = item
+            Text(question)
+              .font(.title3)
+              .foregroundColor(correct ? .primary : .secondary)
+              .multilineTextAlignment(.center)
+          }
+        }
+        .frame(maxWidth: .infinity)
         .padding()
       }
+      .background(.white.opacity(0.25))
+
+      WideButton(title: "Play again") {
+        onCompleted()
+      }
+      .fontWeight(.bold)
     }
   }
 }
 
 #Preview {
   let vm = GameViewModel()
-
   vm.respond(true)
   vm.respond(true)
   vm.respond(false)
 
-  return ResultsView(vm: vm)
+  return ScreenContainer {
+    ResultsView()
+  }
+  .environment(vm)
 }

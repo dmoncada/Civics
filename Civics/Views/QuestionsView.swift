@@ -1,79 +1,90 @@
+import Subsonic
 import SwiftUI
 
 struct QuestionsView: View {
+  @Environment(GameViewModel.self) private var vm
+
   @AppStorage(AppStorageKey.duration.rawValue)
   private var duration = 30
 
   @State private var remaining = 0
 
-  var vm: GameViewModel
   var onComplete: () -> Void = {}
 
   var body: some View {
-    ZStack {
-      Color.green.ignoresSafeArea()
-
-      VStack {
-        Text(vm.question)
-          .font(.title)
-
-        VStack {
-          ForEach(vm.answers, id: \.self) { answer in
-            Text("- \(answer)")
-          }
+    verticalContent
+      .task {
+        for await i in countdown(from: duration) {
+          remaining = i
         }
 
-        HStack {
-          Button {
-            vm.respond(true)
-          } label: {
-            Text("Correct")
-              .font(.headline)
-              .foregroundColor(.white)
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.yellow)
-              .cornerRadius(12)
-          }
-
-          Button {
-            vm.respond(false)
-          } label: {
-            Text("Incorrect")
-              .font(.headline)
-              .foregroundColor(.white)
-              .frame(maxWidth: .infinity)
-              .padding()
-              .background(Color.red)
-              .cornerRadius(12)
-          }
-        }
-
-        let duration = Duration.seconds(remaining)
-        Text(duration.formatted(.time(pattern: .minuteSecond)))
-          .font(.title)
-
-        Button("See Results") {
+        if remaining == 0 {
           onComplete()
         }
-        .font(.title)
-        .foregroundStyle(.white)
       }
-    }
-    .task {
-      for await i in countdown(from: duration) {
-        remaining = i
+  }
+
+  var verticalContent: some View {
+    VStack(spacing: 16) {
+      Text(vm.question)
+        .font(.title2)
+        .fontWeight(.bold)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .frame(height: 150)
+      //        .border(.red)
+
+      ScrollView(.vertical) {
+        VStack(alignment: .leading, spacing: 8) {
+          ForEach(vm.answers, id: \.self) { answer in
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+              Text("🇺🇸")
+                .font(.title3)
+                .scaleEffect(0.75)
+
+              Text(answer)
+                .font(.title3)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+          }
+        }
       }
 
-      if remaining == 0 {
-        onComplete()
+      HStack {
+        WideButton(title: "Correct") {
+          respond(true)
+        }
+        .foregroundStyle(.primary)
+        .fontWeight(.bold)
+        .tint(.correct)
+
+        WideButton(title: "Incorrect") {
+          respond(false)
+        }
+        .foregroundStyle(.primary)
+        .fontWeight(.bold)
+        .tint(.incorrect)
       }
+
+      let duration = Duration.seconds(remaining)
+      let formatted = duration.formatted(.time(pattern: .minuteSecond))
+      Text(formatted)
+        .font(.title)
+        .fontWeight(.bold)
+        .monospacedDigit()
     }
+  }
+
+  private func respond(_ correct: Bool) {
+    let clip = "marimba_\(correct ? "positive" : "negative").mp3"
+    vm.respond(correct)
+    play(sound: clip)
   }
 }
 
 #Preview {
-  return QuestionsView(vm: GameViewModel()) {
-    print("Elapsed")
+  ScreenContainer {
+    QuestionsView()
   }
+  .environment(GameViewModel())
 }

@@ -5,6 +5,12 @@ enum AppStorageKey: String {
   case duration
 }
 
+struct Constants {
+  static let backgroundGradient = LinearGradient(
+    colors: [.background, .background.opacity(0.5)],
+    startPoint: .top, endPoint: .bottom)
+}
+
 func countdown(from start: Int) -> AsyncStream<Int> {
   AsyncStream { continuation in
     Task {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DCC9BDD82F883D0000C4263B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = DCC9BDD72F883D0000C4263B /* README.md */; };
+		DC8F092C2F92DB03002F82D0 /* Subsonic in Frameworks */ = {isa = PBXBuildFile; productRef = DC8F092B2F92DB03002F82D0 /* Subsonic */; };
 		DCC9BDF12F888D5F00C4263B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC8F092C2F92DB03002F82D0 /* Subsonic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +100,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC5A42132EBBECCF00D52DBF /* Build configuration list for PBXNativeTarget "Civics" */;
 			buildPhases = (
+				DC45B7FE2F9187EA00ABC0A1 /* Run Script */,
 				DC5A42042EBBECCD00D52DBF /* Sources */,
 				DC5A42052EBBECCD00D52DBF /* Frameworks */,
 				DC5A42062EBBECCD00D52DBF /* Resources */,
@@ -112,6 +114,7 @@
 			);
 			name = Civics;
 			packageProductDependencies = (
+				DC8F092B2F92DB03002F82D0 /* Subsonic */,
 			);
 			productName = Civics;
 			productReference = DC04BE272EBC18DA003863CF /* Civics.app */;
@@ -169,6 +172,7 @@
 			mainGroup = DC5A41FF2EBBECCD00D52DBF;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				DC8F092A2F92DB03002F82D0 /* XCRemoteSwiftPackageReference "Subsonic" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DC5A41FF2EBBECCD00D52DBF;
@@ -187,7 +191,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCC9BDF12F888D5F00C4263B /* Debug.xcconfig in Resources */,
-				DCC9BDD82F883D0000C4263B /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,6 +202,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DC45B7FE2F9187EA00ABC0A1 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n\nset -euo pipefail\n\nif [[ \"$CONFIGURATION\" != \"Debug\" ]]; then\n  exit 0\nfi\n\nif [[ -n \"${CI:-}\" ]]; then\n  exit 0\nfi\n\n# REPO_ROOT=\"$(git rev-parse --show-toplevel 2>/dev/null)\"\n\nxcrun --toolchain XcodeDefault swift-format format \\\n  --in-place \\\n  --recursive \\\n  --configuration \"${PROJECT_DIR}/.swift-format\" \\\n  \"${PROJECT_DIR}/Civics\" \\\n  \"${PROJECT_DIR}/CivicsTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DC5A42042EBBECCD00D52DBF /* Sources */ = {
@@ -372,7 +397,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -420,7 +446,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -529,6 +556,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DC8F092A2F92DB03002F82D0 /* XCRemoteSwiftPackageReference "Subsonic" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Subsonic";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DC8F092B2F92DB03002F82D0 /* Subsonic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DC8F092A2F92DB03002F82D0 /* XCRemoteSwiftPackageReference "Subsonic" */;
+			productName = Subsonic;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DC5A42002EBBECCD00D52DBF /* Project object */;
 }

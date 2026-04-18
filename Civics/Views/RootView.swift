@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RootView: View {
+  @Environment(GameViewModel.self) private var vm
+
   @AppStorage(AppStorageKey.unionState.rawValue)
   private var unionState: UnionState = .WA
 
@@ -8,43 +10,46 @@ struct RootView: View {
   private var duration = 30
 
   @State private var showSheet = false
+  @State private var localDuration = 30
 
-  var vm: GameViewModel
   var onComplete: () -> Void = {}
 
   var body: some View {
-    ZStack {
-      Color.blue.ignoresSafeArea()
+    VStack {
+      Text("Civics")
+        .font(.largeTitle)
+        .fontWeight(.bold)
+        .foregroundStyle(.primary)
 
-      VStack {
-        Spacer()
+      Text("Get Ready for your Test!")
+        .font(.title2)
+        .fontWeight(.bold)
+        .foregroundStyle(.secondary)
+        .underline()
 
-        HStack(spacing: 24) {
-          CircularButton(systemImage: "gear") {
-            showSheet = true
-          }
-
-          Button {
-            onComplete()
-          } label: {
-            Text("Start")
-              .font(.title)
-              .frame(width: 256, height: 56)
-              .foregroundStyle(.white)
-              .background(.teal)
-              .cornerRadius(24)
-              .bold()
-          }
+      HStack(spacing: 8) {
+        IconButton(systemImage: "gearshape") {
+          showSheet = true
         }
+        .fontWeight(.bold)
 
-        Spacer()
+        WideButton(title: "Start") {
+          onComplete()
+        }
+        .fontWeight(.bold)
       }
     }
     .sheet(isPresented: $showSheet) {
       SettingsView(
         selectedState: $unionState,
-        selectedDuration: $duration
+        selectedDuration: $localDuration
       )
+    }
+    .onAppear() {
+      localDuration = duration
+    }
+    .onChange(of: localDuration) {
+      duration = localDuration
     }
     .task(id: unionState) {
       try? await vm.setState(unionState)
@@ -53,11 +58,8 @@ struct RootView: View {
 }
 
 #Preview {
-  struct Wrapper: View {
-    var body: some View {
-      RootView(vm: GameViewModel()) {}
-    }
+  ScreenContainer {
+    RootView()
   }
-
-  return Wrapper()
+  .environment(GameViewModel())
 }

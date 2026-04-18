@@ -1,19 +1,22 @@
 import SwiftUI
 
 enum Screen: Hashable {
-  case load
+  case countdown
   case questions
   case results
 }
 
-struct NavigationController: View {
+struct ContentView: View {
+  @Environment(GameViewModel.self) private var vm
+
   @State private var path = NavigationPath()
-  @State private var vm = GameViewModel()
 
   var body: some View {
     NavigationStack(path: $path) {
-      RootView(vm: vm) {
-        path.append(Screen.load)
+      ScreenContainer {
+        RootView {
+          path.append(Screen.countdown)
+        }
       }
       .navigationDestination(for: Screen.self) { screen in
         screenView(for: screen)
@@ -30,17 +33,23 @@ struct NavigationController: View {
   private func screenView(for screen: Screen) -> some View {
     Group {
       switch screen {
-      case .load:
-        CountdownView {
-          path.append(Screen.questions)
+      case .countdown:
+        ScreenContainer {
+          CountdownView {
+            path.append(Screen.questions)
+          }
         }
       case .questions:
-        QuestionsView(vm: vm) {
-          path.append(Screen.results)
+        ScreenContainer {
+          QuestionsView {
+            path.append(Screen.results)
+          }
         }
       case .results:
-        ResultsView(vm: vm) {
-          path = NavigationPath()
+        ScreenContainer {
+          ResultsView {
+            path = NavigationPath()
+          }
         }
       }
     }
@@ -48,12 +57,7 @@ struct NavigationController: View {
   }
 }
 
-struct ContentView: View {
-  var body: some View {
-    NavigationController()
-  }
-}
-
 #Preview {
   ContentView()
+    .environment(GameViewModel())
 }

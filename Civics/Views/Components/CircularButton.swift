@@ -1,25 +1,43 @@
 import SwiftUI
 
-struct CircularButton: View {
+struct CircularButtonStyle: PrimitiveButtonStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    Button(action: { configuration.trigger() }) {
+      configuration.label
+    }
+    .buttonStyle(.borderedProminent)
+    .buttonBorderShape(.circle)
+  }
+}
+
+extension PrimitiveButtonStyle where Self == CircularButtonStyle {
+  static var circular: CircularButtonStyle {
+    CircularButtonStyle()
+  }
+}
+
+struct IconButton: View {
   let systemImage: String
   let action: () -> Void
 
-  var size: CGFloat = 56
-  var color: Color = .teal
+  let size: CGFloat = 20
 
   var body: some View {
-    Button(action: action) {
+    Button {
+      action()
+    } label: {
       Image(systemName: systemImage)
-        .font(.system(size: 24, weight: .bold))
-        .foregroundColor(.white)
+        .font(.system(size: 24))
         .frame(width: size, height: size)
-        .background(Circle().fill(color))
     }
+    .buttonStyle(.circular)
+    .controlSize(.extraLarge)
   }
 }
 
 #Preview {
-  CircularButton(systemImage: "gear") {
-    print("You tapped me!")
+  HStack {
+    IconButton(systemImage: "plus") {}
+    IconButton(systemImage: "minus") {}
   }
 }

@@ -6,24 +6,22 @@ struct DurationPicker: View {
   private let values = Array(stride(from: 30, through: 300, by: 30))
 
   var body: some View {
-    HStack(spacing: 16) {
-      CircularButton(
-        systemImage: "minus",
-        action: decrement,
-      )
+    HStack(spacing: 8) {
+      IconButton(systemImage: "minus") {
+        decrement()
+      }
       .disabled(isMin)
 
       let duration = Duration.seconds(selected)
 
       Text(duration.formatted(.time(pattern: .minuteSecond)))
         .font(.system(size: 40, weight: .semibold, design: .rounded))
-        .contentTransition(.numericText(value: Double(selected)))
+        .contentTransition(.numericText())
         .monospacedDigit()
 
-      CircularButton(
-        systemImage: "plus",
-        action: increment,
-      )
+      IconButton(systemImage: "plus") {
+        increment()
+      }
       .disabled(isMax)
     }
   }
@@ -56,11 +54,6 @@ struct DurationPicker: View {
 }
 
 #Preview {
-  struct Wrapper: View {
-    @State private var selected = 30
-    var body: some View {
-      DurationPicker(selected: $selected)
-    }
-  }
-  return Wrapper()
+  @Previewable @State var selected = 30
+  DurationPicker(selected: $selected)
 }

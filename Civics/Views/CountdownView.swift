@@ -1,3 +1,4 @@
+import Subsonic
 import SwiftUI
 
 struct CountdownView: View {
@@ -14,6 +15,7 @@ struct CountdownView: View {
       .scaledToFit()
       .task {
         for await i in countdown(from: 3) {
+          play(sound: "gentle_click.mp3")
           withAnimation {
             value = i
           }

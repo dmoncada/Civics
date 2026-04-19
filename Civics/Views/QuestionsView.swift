@@ -19,6 +19,7 @@ struct QuestionsView: View {
         }
 
         if remaining == 0 {
+          vm.respond(false)
           onComplete()
         }
       }

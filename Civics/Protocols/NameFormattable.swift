@@ -1,22 +1,11 @@
 import Foundation
 
 protocol NameFormattable {
-  var name: String { get }
+  var nameComponents: PersonNameComponents { get }
 }
 
 extension NameFormattable {
-  private func formattedName(style: PersonNameComponentsFormatter.Style) -> String {
-    let formatter = PersonNameComponentsFormatter()
-    formatter.style = style
-
-    if let components = formatter.personNameComponents(from: name) {
-      return formatter.string(from: components)
-    }
-
-    return name
-  }
-
-  var shortName: String { formattedName(style: .short) }
-  var mediumName: String { formattedName(style: .medium) }
-  var longName: String { formattedName(style: .long) }
+  var shortName: String { nameComponents.formatted(.name(style: .short)) }
+  var mediumName: String { nameComponents.formatted(.name(style: .medium)) }
+  var longName: String { nameComponents.formatted(.name(style: .long)) }
 }

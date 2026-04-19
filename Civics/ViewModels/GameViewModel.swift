@@ -14,7 +14,7 @@ class GameViewModel {
   private var currentIndex = 0
 
   init() {
-    questions = (try? CivicsDataLoader.load()) ?? []
+    do { questions = try CivicsDataLoader.load() } catch { fatalError() }
     shuffledIndices = Array(0 ..< questions.count)
     reset()
   }
@@ -32,8 +32,12 @@ class GameViewModel {
     async let task1 = service.fetchSenators(for: state)
     async let task2 = service.fetchRepresentatives(for: state)
 
-    senators = try await task1
-    representatives = try await task2
+    let comparator1 = KeyPathComparator(\Senator.nameComponents.familyName)
+    let comparator2 = KeyPathComparator(\Representative.district)
+
+    senators = try await task1.sorted(using: comparator1)
+    representatives = try await task2.sorted(using: comparator2)
+
     unionState = state
   }
 

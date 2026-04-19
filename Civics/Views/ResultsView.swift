@@ -8,7 +8,7 @@ struct ResultsView: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      let correctCount = vm.responses.count(where: \.correct)
+     let correctCount = vm.responses.count(where: \.correct)
       Text("You got ^[\(correctCount) question](inflect: true)!")
         .font(.title2)
         .fontWeight(.bold)

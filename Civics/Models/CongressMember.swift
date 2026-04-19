@@ -33,17 +33,17 @@ struct CongressMember: Decodable {
 
 struct Senator: Identifiable {
   let id: String
-  let name: String
   let party: String
-  let state: String
+  let state: UnionState
+  let nameComponents: PersonNameComponents
 }
 
 struct Representative: Identifiable {
   let id: String
-  let name: String
   let party: String
-  let state: String
+  let state: UnionState
   let district: Int?
+  let nameComponents: PersonNameComponents
 }
 
 extension Senator: NameFormattable {}

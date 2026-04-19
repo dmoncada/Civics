@@ -15,7 +15,7 @@ struct CongressApi {
   static func buildMembersUrl(for state: UnionState, limit: Int = 250, current: Bool = true) throws -> URL {
     guard var components = URLComponents(string: baseUrl) else { throw URLError(.badURL) }
 
-    components.path = "/v3/member/\(state.rawValue)"
+    components.path = "/v3/member/\(state.code)"
     components.queryItems = [
       URLQueryItem(name: "format", value: "json"),
       URLQueryItem(name: "limit", value: limit.description),
@@ -34,12 +34,12 @@ class CongressService {
   func fetchSenators(for state: UnionState) async throws -> [Senator] {
     let response = try await fetchResponse(for: state)
 
-    return response.members.filter(\.isSenator).map { member in
+    return try response.members.filter(\.isSenator).map { member in
       Senator(
         id: member.bioguideId,
-        name: member.name,
         party: member.partyName,
-        state: member.state
+        state: UnionState(rawValue: member.state)!,
+        nameComponents: try getComponents(from: member.name)
       )
     }
   }
@@ -47,25 +47,22 @@ class CongressService {
   func fetchRepresentatives(for state: UnionState) async throws -> [Representative] {
     let response = try await fetchResponse(for: state)
 
-    var representatives = response.members.filter(\.isRepresentative).map { member in
+    return try response.members.filter(\.isRepresentative).map { member in
       Representative(
         id: member.bioguideId,
-        name: member.name,
         party: member.partyName,
-        state: member.state,
-        district: member.district
+        state: UnionState(rawValue: member.state)!,
+        district: member.district,
+        nameComponents: try getComponents(from: member.name)
       )
     }
+  }
 
-    representatives.sort {
-      if let district1 = $0.district, let district2 = $1.district {
-        return district1 < district2
-      }
-
-      return $0.name < $1.name
-    }
-
-    return representatives
+  private func getComponents(from name: String) throws -> PersonNameComponents {
+    let (name, nickname) = try extractNickname(from: name)
+    var components = try PersonNameComponents(name)
+    components.nickname = nickname
+    return components
   }
 
   private func fetchResponse(for state: UnionState) async throws -> CongressResponse {
@@ -91,6 +88,7 @@ class CongressService {
       let response = try await task.value
       cache[state] = .ready(response)
       return response
+
     } catch {
       cache[state] = nil
       throw error

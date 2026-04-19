@@ -100,7 +100,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC5A42132EBBECCF00D52DBF /* Build configuration list for PBXNativeTarget "Civics" */;
 			buildPhases = (
-				DC45B7FE2F9187EA00ABC0A1 /* Run Script */,
 				DC5A42042EBBECCD00D52DBF /* Sources */,
 				DC5A42052EBBECCD00D52DBF /* Frameworks */,
 				DC5A42062EBBECCD00D52DBF /* Resources */,
@@ -202,28 +201,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		DC45B7FE2F9187EA00ABC0A1 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n\nset -euo pipefail\n\nif [[ \"$CONFIGURATION\" != \"Debug\" ]]; then\n  exit 0\nfi\n\nif [[ -n \"${CI:-}\" ]]; then\n  exit 0\nfi\n\n# REPO_ROOT=\"$(git rev-parse --show-toplevel 2>/dev/null)\"\n\nxcrun --toolchain XcodeDefault swift-format format \\\n  --in-place \\\n  --recursive \\\n  --configuration \"${PROJECT_DIR}/.swift-format\" \\\n  \"${PROJECT_DIR}/Civics\" \\\n  \"${PROJECT_DIR}/CivicsTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DC5A42042EBBECCD00D52DBF /* Sources */ = {

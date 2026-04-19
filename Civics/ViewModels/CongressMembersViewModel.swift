@@ -16,8 +16,11 @@ class CongressMembersViewModel {
       async let task1 = service.fetchSenators(for: state)
       async let task2 = service.fetchRepresentatives(for: state)
 
-      senators = try await task1
-      representatives = try await task2
+      let comparator1 = KeyPathComparator(\Senator.nameComponents.familyName)
+      let comparator2 = KeyPathComparator(\Representative.district)
+
+      senators = try await task1.sorted(using: comparator1)
+      representatives = try await task2.sorted(using: comparator2)
 
     } catch {
       print(error)

@@ -19,8 +19,8 @@ struct AnswerRow: View {
 
 #Preview {
   VStack {
-    AnswerRow(answer: "Answer 1", font: .title3)
-    AnswerRow(answer: "Answer 2", font: .title3)
+    AnswerRow(answer: "Answer 1", font: .title)
+    AnswerRow(answer: "Answer 2", font: .title2)
     AnswerRow(answer: "Answer 3", font: .title3)
   }
 }

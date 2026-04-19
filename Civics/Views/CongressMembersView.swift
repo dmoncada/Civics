@@ -17,14 +17,14 @@ struct CongressMembersView: View {
         List {
           Section("Senators") {
             ForEach(vm.senators) { member in
-              Text(member.longName)
+              Text(member.mediumName)
             }
           }
 
           Section("Representatives") {
             ForEach(vm.representatives) { member in
               HStack {
-                Text(member.longName)
+                Text(member.mediumName)
                   .frame(alignment: .leading)
 
                 if let district = member.district {

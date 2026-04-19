@@ -37,7 +37,7 @@ struct CivicsTests {
 
     #expect(vm.questions.count + 1 == vm.responses.count)
 
-    let all = Set(vm.responses.map(\.question))
+    let all = Set(vm.responses.map(\.index).map { vm.question(id: $0) })
 
     #expect(vm.questions.count == all.count)
   }

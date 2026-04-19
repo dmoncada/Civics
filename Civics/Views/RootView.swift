@@ -45,7 +45,7 @@ struct RootView: View {
         selectedDuration: $localDuration
       )
     }
-    .onAppear() {
+    .onAppear {
       localDuration = duration
     }
     .onChange(of: localDuration) {

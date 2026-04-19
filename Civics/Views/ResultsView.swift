@@ -1,3 +1,4 @@
+import Subsonic
 import SwiftUI
 
 struct ResultsView: View {
@@ -8,29 +9,44 @@ struct ResultsView: View {
   var body: some View {
     VStack(spacing: 16) {
       let correctCount = vm.responses.count(where: \.correct)
-      Text("You got \(correctCount) questions!")
+      Text("You got ^[\(correctCount) question](inflect: true)!")
         .font(.title2)
         .fontWeight(.bold)
 
       ScrollView(.vertical) {
-        VStack(spacing: 16) {
-          ForEach(vm.responses, id: \.question) { item in
-            let (question, correct) = item
-            Text(question)
-              .font(.title3)
-              .foregroundColor(correct ? .primary : .secondary)
-              .multilineTextAlignment(.center)
+        VStack(spacing: 8) {
+          ForEach(vm.responses, id: \.index) { item in
+            let (id, correct) = item
+            let question = vm.question(id: id)
+            let answers = vm.answers(for: id)
+
+            DisclosureGroup {
+              VStack(alignment: .leading, spacing: 8) {
+                ForEach(answers, id: \.self) { answer in
+                  AnswerRow(answer: answer, font: .system(size: 16))
+                }
+              }
+              .padding(.top, 4)
+
+            } label: {
+              Text(question)
+                .font(.title3)
+                .multilineTextAlignment(.leading)
+                .foregroundColor(correct ? .primary : .secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
           }
         }
-        .frame(maxWidth: .infinity)
         .padding()
       }
-      .background(.white.opacity(0.25))
 
-      WideButton(title: "Play again") {
+      WideButton(title: "Restart") {
         onCompleted()
       }
       .fontWeight(.bold)
+    }
+    .onAppear {
+      play(sound: "marimba_shake.mp3")
     }
   }
 }
@@ -45,4 +61,7 @@ struct ResultsView: View {
     ResultsView()
   }
   .environment(vm)
+  .task {
+    try? await vm.setState(.WA)
+  }
 }

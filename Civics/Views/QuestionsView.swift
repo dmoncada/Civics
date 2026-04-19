@@ -26,65 +26,65 @@ struct QuestionsView: View {
 
   var verticalContent: some View {
     VStack(spacing: 16) {
-      Text(vm.question)
+      Text(vm.currentQuestion)
         .font(.title2)
         .fontWeight(.bold)
         .multilineTextAlignment(.center)
-        .frame(maxWidth: .infinity)
         .frame(height: 150)
-      //        .border(.red)
 
       ScrollView(.vertical) {
         VStack(alignment: .leading, spacing: 8) {
-          ForEach(vm.answers, id: \.self) { answer in
+          ForEach(vm.currentAnswers, id: \.self) { answer in
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-              Text("🇺🇸")
-                .font(.title3)
-                .scaleEffect(0.75)
-
-              Text(answer)
-                .font(.title3)
-                .frame(maxWidth: .infinity, alignment: .leading)
+              AnswerRow(answer: answer, font: .title3)
             }
           }
         }
       }
 
       HStack {
-        WideButton(title: "Correct") {
-          respond(true)
-        }
-        .foregroundStyle(.primary)
-        .fontWeight(.bold)
-        .tint(.correct)
-
-        WideButton(title: "Incorrect") {
-          respond(false)
-        }
-        .foregroundStyle(.primary)
-        .fontWeight(.bold)
-        .tint(.incorrect)
+        responseButton(true)
+        responseButton(false)
       }
 
-      let duration = Duration.seconds(remaining)
-      let formatted = duration.formatted(.time(pattern: .minuteSecond))
-      Text(formatted)
-        .font(.title)
-        .fontWeight(.bold)
-        .monospacedDigit()
+      countdownTimer
     }
   }
 
-  private func respond(_ correct: Bool) {
+  @ViewBuilder
+  private func responseButton(_ correct: Bool) -> some View {
+    let title = correct ? "Correct" : "Incorrect"
+    let tint = correct ? Color.correct : .incorrect
     let clip = "marimba_\(correct ? "positive" : "negative").mp3"
-    vm.respond(correct)
-    play(sound: clip)
+
+    WideButton(title: title) {
+      vm.respond(correct)
+      play(sound: clip)
+    }
+    .foregroundStyle(.primary)
+    .fontWeight(.bold)
+    .tint(tint)
+  }
+
+  @ViewBuilder
+  private var countdownTimer: some View {
+    let duration = Duration.seconds(remaining)
+    let formatted = duration.formatted(.time(pattern: .minuteSecond))
+
+    Text(formatted)
+      .font(.title)
+      .fontWeight(.bold)
+      .monospacedDigit()
   }
 }
 
 #Preview {
-  ScreenContainer {
+  let vm = GameViewModel()
+  return ScreenContainer {
     QuestionsView()
   }
-  .environment(GameViewModel())
+  .environment(vm)
+  .task {
+    try? await vm.setState(.WA)
+  }
 }

@@ -4,21 +4,23 @@ import SwiftUI
 @Observable
 class GameViewModel {
   private(set) var questions: [CivicsQuestion]
-  private(set) var responses = [(question: String, correct: Bool)]()
+  private(set) var responses = [(index: Int, correct: Bool)]()
 
   private(set) var unionState: UnionState? = nil
   private(set) var senators: [Senator] = []
   private(set) var representatives: [Representative] = []
 
+  private var shuffledIndices: [Int] = []
   private var currentIndex = 0
 
   init() {
-    questions = CivicsDataLoader.load()
+    questions = (try? CivicsDataLoader.load()) ?? []
+    shuffledIndices = Array(0 ..< questions.count)
     reset()
   }
 
   func reset() {
-    questions.shuffle()
+    shuffledIndices.shuffle()
     currentIndex = 0
     responses = []
   }
@@ -36,32 +38,40 @@ class GameViewModel {
   }
 
   func respond(_ correct: Bool) {
-    responses.append((question, correct))
+    responses.append((questionIndex, correct))
     advance()
   }
 
   private func advance() {
     currentIndex += 1
 
-    if currentIndex == questions.count {
-      questions.shuffle()
+    if currentIndex == shuffledIndices.count {
+      shuffledIndices.shuffle()
       currentIndex = 0
     }
   }
 
-  var question: String {
-    questions[currentIndex].question
+  var currentQuestion: String {
+    question(id: questionIndex)
   }
 
-  var answers: [String] {
-    let question = questions[currentIndex]
+  var currentAnswers: [String] {
+    answers(for: questionIndex)
+  }
+
+  func question(id index: Int) -> String {
+    questions[index].question
+  }
+
+  func answers(for index: Int) -> [String] {
+    let question = questions[index]
 
     switch question.id {
     case 23:  // State's senators.
       return senators.map(\.mediumName)
     case 29:  // State's representatives.
       return representatives.map(\.mediumName)
-case 30:  // Speaker.
+    case 30:  // Speaker.
       return ["Mike Johnson", "Johnson", "James Michael Johnson"]
     case 38:  // President.
       return ["Donald J. Trump", "Donald Trump", "Trump"]
@@ -77,4 +87,6 @@ case 30:  // Speaker.
       return question.answers
     }
   }
+
+  private var questionIndex: Int { shuffledIndices[currentIndex] }
 }

@@ -19,6 +19,7 @@ swift-fmt-check:
 .PHONY: pre-commit
 pre-commit:
 	cp scripts/pre-commit.fmt .git/hooks
+	chmod +x .git/hooks/pre-commit.fmt
 	touch .git/hooks/pre-commit
 	cat .git/hooks/pre-commit | grep -v 'hooks/pre-commit\.fmt' > /tmp/pre-commit.new || true
 	echo 'PRECOMMIT_NOFMT=$${PRECOMMIT_NOFMT} $$(git rev-parse --show-toplevel)/.git/hooks/pre-commit.fmt' >> /tmp/pre-commit.new

@@ -7,7 +7,7 @@ struct CivicsTests {
   @Test
   func testCount() {
     let vm = GameViewModel()
-    #expect(vm.questions.count == 128)
+    #expect(vm.count == 128)
   }
 
   @Test
@@ -29,16 +29,16 @@ struct CivicsTests {
   @Test
   func testWrapAround() {
     let vm = GameViewModel()
-    let count = vm.questions.count
+    let count = vm.count
 
     for _ in 0 ... count {  // Respond n+1 times.
       vm.respond(true)
     }
 
-    #expect(vm.questions.count + 1 == vm.responses.count)
+    #expect(count + 1 == vm.responses.count)
 
     let all = Set(vm.responses.map(\.index).map { vm.question(id: $0) })
 
-    #expect(vm.questions.count == all.count)
+    #expect(count == all.count)
   }
 }

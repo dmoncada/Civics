@@ -25,7 +25,6 @@
 		DC019FDA2F95A0FC00DE4E2F /* User.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = User.xcconfig; sourceTree = "<group>"; };
 		DC04BE272EBC18DA003863CF /* Civics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Civics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCC9BDD72F883D0000C4263B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		DCF5D0172F8ACC8100253974 /* CivicsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CivicsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -78,11 +77,10 @@
 			isa = PBXGroup;
 			children = (
 				DCC9BDD72F883D0000C4263B /* README.md */,
-				DCC9BDF02F888D5F00C4263B /* Debug.xcconfig */,
+				DC019FDA2F95A0FC00DE4E2F /* User.xcconfig */,
 				DC5A420A2EBBECCD00D52DBF /* Civics */,
 				DCF5D0182F8ACC8100253974 /* CivicsTests */,
 				DCF5D0232F8AD08100253974 /* Targets */,
-				DC019FDA2F95A0FC00DE4E2F /* User.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};

@@ -52,7 +52,11 @@ struct RootView: View {
       duration = localDuration
     }
     .task(id: unionState) {
-      try? await vm.setState(unionState)
+      do {
+        try await vm.setState(unionState)
+      } catch {
+        print(error)
+      }
     }
   }
 }

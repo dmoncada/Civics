@@ -3,24 +3,27 @@ import SwiftUI
 @MainActor
 @Observable
 class GameViewModel {
-  private(set) var questions: [CivicsQuestion]
   private(set) var responses = [(index: Int, correct: Bool)]()
 
   private(set) var unionState: UnionState? = nil
   private(set) var senators: [Senator] = []
   private(set) var representatives: [Representative] = []
 
-  private var shuffledIndices: [Int] = []
+  private var questions: [CivicsQuestion]
+  private var questionIndices: [Int] = []
   private var currentIndex = 0
 
+  var count: Int { questions.count }
+
   init() {
-    do { questions = try CivicsDataLoader.load() } catch { fatalError() }
-    shuffledIndices = Array(0 ..< questions.count)
+    guard let data = try? CivicsDataLoader.load() else { fatalError() }
+    questions = data.sorted(using: KeyPathComparator(\.id))
+    questionIndices = Array(0 ..< questions.count)
     reset()
   }
 
   func reset() {
-    shuffledIndices.shuffle()
+    questionIndices.shuffle()
     currentIndex = 0
     responses = []
   }
@@ -43,14 +46,14 @@ class GameViewModel {
 
   func respond(_ correct: Bool) {
     responses.append((questionIndex, correct))
-    advance()
+    next()
   }
 
-  private func advance() {
+  private func next() {
     currentIndex += 1
 
-    if currentIndex == shuffledIndices.count {
-      shuffledIndices.shuffle()
+    if currentIndex == questionIndices.count {
+      questionIndices.shuffle()
       currentIndex = 0
     }
   }
@@ -92,5 +95,5 @@ class GameViewModel {
     }
   }
 
-  private var questionIndex: Int { shuffledIndices[currentIndex] }
+  private var questionIndex: Int { questionIndices[currentIndex] }
 }

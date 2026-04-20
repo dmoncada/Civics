@@ -38,7 +38,7 @@ class CongressService {
       Senator(
         id: member.bioguideId,
         party: member.partyName,
-        state: UnionState(rawValue: member.state)!,
+        state: try UnionState(validating: member.state),
         nameComponents: try getComponents(from: member.name)
       )
     }
@@ -51,7 +51,7 @@ class CongressService {
       Representative(
         id: member.bioguideId,
         party: member.partyName,
-        state: UnionState(rawValue: member.state)!,
+        state: try UnionState(validating: member.state),
         district: member.district,
         nameComponents: try getComponents(from: member.name)
       )

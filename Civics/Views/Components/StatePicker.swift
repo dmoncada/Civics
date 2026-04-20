@@ -16,6 +16,6 @@ struct StatePicker: View {
 }
 
 #Preview {
-  @Previewable @State var state: UnionState = .WA
+  @Previewable @State var state: UnionState = .wa
   StatePicker(selected: $state)
 }

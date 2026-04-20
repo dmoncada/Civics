@@ -4,7 +4,7 @@ struct RootView: View {
   @Environment(GameViewModel.self) private var vm
 
   @AppStorage(AppStorageKey.unionState.rawValue)
-  private var unionState: UnionState = .WA
+  private var unionState: UnionState = .wa
 
   @AppStorage(AppStorageKey.duration.rawValue)
   private var duration = 30

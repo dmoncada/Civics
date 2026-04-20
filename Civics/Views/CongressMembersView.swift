@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CongressMembersView: View {
-  @State private var state: UnionState = .WA
+  @State private var state: UnionState = .wa
   @State private var vm = CongressMembersViewModel()
 
   var body: some View {

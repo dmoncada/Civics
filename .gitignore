@@ -93,3 +93,6 @@ Icon[
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# XCode build configuration files.
+*.xcconfig

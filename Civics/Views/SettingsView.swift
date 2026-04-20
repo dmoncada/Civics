@@ -17,7 +17,7 @@ struct SettingsView: View {
 
 #Preview {
   @Previewable @State var showSheet = false
-  @Previewable @State var state: UnionState = .WA
+  @Previewable @State var state: UnionState = .wa
   @Previewable @State var duration = 120
 
   Button("Show Sheet") {

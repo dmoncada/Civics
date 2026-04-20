@@ -62,6 +62,6 @@ struct ResultsView: View {
   }
   .environment(vm)
   .task {
-    try? await vm.setState(.WA)
+    try? await vm.setState(.wa)
   }
 }

@@ -9,7 +9,7 @@ struct ResultsView: View {
   var body: some View {
     VStack(spacing: 16) {
       let correctCount = vm.responses.count(where: \.correct)
-      Text("You got ^[\(correctCount) question](inflect: true)!")
+      Text("You got ^[\(correctCount) question](inflect: true) \(getIcon(correctCount))")
         .font(.title2)
         .fontWeight(.bold)
 
@@ -48,6 +48,24 @@ struct ResultsView: View {
     .onAppear {
       play(sound: "marimba_shake.mp3")
     }
+  }
+
+  private func getIcon(_ count: Int) -> String {
+    let questionsCount = GameViewModel.maxQuestionsCount
+    let passingCount = GameViewModel.minPassingCount
+
+    switch count {
+    case ..<passingCount:
+      return "😔"
+    case passingCount ..< questionsCount:
+      return "💪"
+    case questionsCount...:
+      return "🎉"
+    default:
+      break
+    }
+
+    return "Unreachable"
   }
 }
 

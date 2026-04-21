@@ -3,6 +3,9 @@ import SwiftUI
 @MainActor
 @Observable
 class GameViewModel {
+  static let maxQuestionsCount = 20
+  static let minPassingCount = 12
+
   private(set) var responses = [(index: Int, correct: Bool)]()
 
   private(set) var unionState: UnionState? = nil

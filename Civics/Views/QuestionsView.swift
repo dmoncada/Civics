@@ -7,18 +7,25 @@ struct QuestionsView: View {
   @AppStorage(AppStorageKey.duration.rawValue)
   private var duration = 30
 
-  @State private var remaining = 0
+  @State private var timeRemaining = 0
 
   var onComplete: () -> Void = {}
 
+  private let limit = GameViewModel.maxQuestionsCount
+
   var body: some View {
     verticalContent
+      .onChange(of: vm.responses.count) {
+        if timeRemaining > 0 && vm.responses.count == limit {
+          onComplete()
+        }
+      }
       .task {
         for await i in countdown(from: duration) {
-          remaining = i
+          timeRemaining = i
         }
 
-        if remaining == 0 {
+        if timeRemaining == 0 {
           vm.respond(false)
           onComplete()
         }
@@ -43,9 +50,11 @@ struct QuestionsView: View {
         }
       }
 
+      progressBar
+
       HStack {
-        responseButton(true)
         responseButton(false)
+        responseButton(true)
       }
 
       countdownTimer
@@ -60,7 +69,7 @@ struct QuestionsView: View {
 
     WideButton(title: title) {
       vm.respond(correct)
-      play(sound: clip)
+      play(clip: clip)
     }
     .foregroundStyle(.primary)
     .fontWeight(.bold)
@@ -68,14 +77,32 @@ struct QuestionsView: View {
   }
 
   @ViewBuilder
+  private var progressBar: some View {
+    let count = vm.responses.count
+
+    ProgressView(value: Double(count), total: Double(limit)) {
+      Text("\(count) of \(limit)")
+        .contentTransition(.numericText())
+    }
+    .progressViewStyle(CustomProgressStyle())
+    .animation(.default, value: count)
+  }
+
+  @ViewBuilder
   private var countdownTimer: some View {
-    let duration = Duration.seconds(remaining)
+    let duration = Duration.seconds(timeRemaining)
     let formatted = duration.formatted(.time(pattern: .minuteSecond))
 
     Text(formatted)
       .font(.title)
       .fontWeight(.bold)
       .monospacedDigit()
+  }
+
+  private func play(clip: String) {
+    if vm.responses.count < limit {
+      play(sound: clip)
+    }
   }
 }
 

@@ -7,7 +7,7 @@ enum AppStorageKey: String {
 
 struct Constants {
   static let backgroundGradient = LinearGradient(
-    colors: [Color.background, Color.background.opacity(0.5)],
+    colors: [.background, .background.opacity(0.5)],
     startPoint: .top, endPoint: .bottom)
 }
 

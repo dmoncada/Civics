@@ -30,6 +30,7 @@ struct FlippableCard<Front: View, Back: View>: View {
 
 #Preview {
   @Previewable @State var isFlipped = false
+
   FlippableCard(isFlipped: isFlipped) {
     ZStack {
       RoundedRectangle(cornerRadius: 16)

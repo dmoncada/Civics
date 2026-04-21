@@ -16,13 +16,13 @@ extension PrimitiveButtonStyle where Self == CircularButtonStyle {
   }
 }
 
-enum IconAlignment {
+enum AlignmentOffset {
   case none
   case vertical(CGFloat)
   case horizontal(CGFloat)
   case custom(x: CGFloat, y: CGFloat)
 
-  var offset: (x: CGFloat, y: CGFloat) {
+  var values: (x: CGFloat, y: CGFloat) {
     switch self {
     case .none: return (0, 0)
     case .vertical(let y): return (0, y)
@@ -34,14 +34,14 @@ enum IconAlignment {
 
 struct IconButton: View {
   let systemImage: String
-  let alignment: IconAlignment
+  let offset: AlignmentOffset
   let action: () -> Void
 
   let size: CGFloat = 20
 
-  init(systemImage: String, alignment: IconAlignment = .none, action: @escaping () -> Void) {
+  init(systemImage: String, offset: AlignmentOffset = .none, action: @escaping () -> Void) {
     self.systemImage = systemImage
-    self.alignment = alignment
+    self.offset = offset
     self.action = action
   }
 
@@ -52,8 +52,8 @@ struct IconButton: View {
       Image(systemName: systemImage)
         .font(.system(size: 24))
         .frame(width: size, height: size)
-        .alignmentGuide(HorizontalAlignment.center) { d in d.width / 2 - alignment.offset.x }
-        .alignmentGuide(VerticalAlignment.center) { d in d.height / 2 + alignment.offset.y }
+        .alignmentGuide(HorizontalAlignment.center) { d in d.width / 2 - offset.values.x }
+        .alignmentGuide(VerticalAlignment.center) { d in d.height / 2 + offset.values.y }
     }
     .buttonStyle(.circular)
     .controlSize(.extraLarge)
@@ -64,6 +64,6 @@ struct IconButton: View {
   HStack {
     IconButton(systemImage: "plus") {}
     IconButton(systemImage: "minus") {}
-    IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", alignment: .vertical(1)) {}
+    IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offset: .vertical(1)) {}
   }
 }

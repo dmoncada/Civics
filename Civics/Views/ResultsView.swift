@@ -26,7 +26,6 @@ struct ResultsView: View {
                   AnswerRow(answer: answer, font: .system(size: 16))
                 }
               }
-              .padding(.top, 4)
 
             } label: {
               Text(question)
@@ -35,6 +34,7 @@ struct ResultsView: View {
                 .foregroundColor(correct ? .primary : .secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .disclosureGroupStyle(CustomDisclosureStyle())
           }
         }
         .padding()

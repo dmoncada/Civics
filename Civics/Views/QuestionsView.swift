@@ -27,7 +27,7 @@ struct QuestionsView: View {
 
   var verticalContent: some View {
     VStack(spacing: 16) {
-      Text(vm.currentQuestion)
+      Text(vm.currentQuestion.replaceEmphasized(with: .underline))
         .font(.title2)
         .fontWeight(.bold)
         .multilineTextAlignment(.center)

@@ -40,12 +40,12 @@ struct PreparationView: View {
           updateIndex(0)
         }
 
-        IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", alignment: .vertical(1)) {
+        IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offset: .vertical(1)) {
           let index = currentIndex ?? 0
           updateIndex(index - step)
         }
 
-        IconButton(systemImage: "10.arrow.trianglehead.clockwise", alignment: .vertical(1)) {
+        IconButton(systemImage: "10.arrow.trianglehead.clockwise", offset: .vertical(1)) {
           let index = currentIndex ?? 0
           updateIndex(index + step)
         }
@@ -65,12 +65,12 @@ struct PreparationView: View {
   }
 
   @ViewBuilder
-  func cardView(for questionIndex: Int, isFlipped: Bool) -> some View {
-    let question = vm.question(id: questionIndex)
-    let answers = vm.answers(for: questionIndex)
+  func cardView(for id: Int, isFlipped: Bool) -> some View {
+    let question = vm.question(id: id)
+    let answers = vm.answers(for: id)
 
     FlippableCard(isFlipped: isFlipped) {
-      frontView(question)
+      frontView(question, id: id)
 
     } back: {
       backView(answers)
@@ -79,13 +79,14 @@ struct PreparationView: View {
     .frame(width: 250, height: 500)
   }
 
-  func frontView(_ question: String) -> some View {
+  func frontView(_ question: String, id: Int) -> some View {
     ZStack {
       RoundedRectangle(cornerRadius: 16)
         .fill(.red.opacity(0.5))
 
       VStack {
-        Text(question)
+        Text("Question #\(id + 1)")
+        Text(question.replaceEmphasized(with: .underline))
           .multilineTextAlignment(.center)
           .foregroundStyle(.primary)
           .font(.title2.bold())
@@ -110,7 +111,11 @@ struct PreparationView: View {
 }
 
 #Preview {
+  let vm = GameViewModel()
   ScreenContainer {
-    PreparationView(vm: GameViewModel())
+    PreparationView(vm: vm)
+  }
+  .task {
+    try? await vm.setState(.wa)
   }
 }

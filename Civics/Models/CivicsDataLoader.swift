@@ -4,8 +4,7 @@ struct CivicsDataLoader {
   static func load() throws -> [CivicsQuestion] {
     let resource = "civics2025"
     guard let url = Bundle.main.url(forResource: resource, withExtension: "json") else {
-      print("Resource: '\(resource).json' not found in main bundle.")
-      return []
+      fatalError("Resource: '\(resource).json' not found in main bundle.")
     }
 
     let data = try Data(contentsOf: url)

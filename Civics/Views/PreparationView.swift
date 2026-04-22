@@ -58,7 +58,7 @@ struct PreparationView: View {
   }
 
   func updateIndex(_ next: Int) {
-    let next = max(0, min(vm.count - 1, next))
+    let next = next.clamped(to: 0 ... vm.count - 1)
     withAnimation(.easeInOut(duration: 0.75)) {
       currentIndex = next
     }

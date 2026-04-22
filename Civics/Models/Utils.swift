@@ -11,6 +11,12 @@ struct Constants {
     startPoint: .top, endPoint: .bottom)
 }
 
+extension Comparable {
+  func clamped(to limits: ClosedRange<Self>) -> Self {
+    min(max(self, limits.lowerBound), limits.upperBound)
+  }
+}
+
 func extractNickname(from name: String) throws -> (String, String?) {
   var name = name
   var nickname: String? = nil

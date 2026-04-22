@@ -22,6 +22,11 @@ struct ContentView: View {
         screenView(for: screen)
       }
     }
+    .onAppear {
+      let audio = AudioManager.shared
+      try? audio.configureSession()
+      try? audio.preloadClips()
+    }
     .onChange(of: path) {
       if path.isEmpty {
         vm.reset()

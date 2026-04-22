@@ -1,4 +1,3 @@
-import Subsonic
 import SwiftUI
 
 struct QuestionsView: View {
@@ -65,11 +64,14 @@ struct QuestionsView: View {
   private func responseButton(_ correct: Bool) -> some View {
     let title = correct ? "Correct" : "Incorrect"
     let tint = correct ? Color.correct : .incorrect
-    let clip = "marimba_\(correct ? "positive" : "negative").mp3"
+    let clip = "marimba_\(correct ? "positive" : "negative")"
 
     WideButton(title: title) {
       vm.respond(correct)
-      play(clip: clip)
+
+      if vm.responses.count < limit {
+        play(clip: clip)
+      }
     }
     .foregroundStyle(.primary)
     .fontWeight(.bold)
@@ -97,12 +99,6 @@ struct QuestionsView: View {
       .font(.title)
       .fontWeight(.bold)
       .monospacedDigit()
-  }
-
-  private func play(clip: String) {
-    if vm.responses.count < limit {
-      play(sound: clip)
-    }
   }
 }
 

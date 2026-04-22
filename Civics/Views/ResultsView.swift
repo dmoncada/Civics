@@ -1,4 +1,3 @@
-import Subsonic
 import SwiftUI
 
 struct ResultsView: View {
@@ -28,7 +27,7 @@ struct ResultsView: View {
               }
 
             } label: {
-              Text(question)
+              Text(question.replaceEmphasized(with: .underline))
                 .font(.title3)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(correct ? .primary : .secondary)
@@ -46,7 +45,7 @@ struct ResultsView: View {
       .fontWeight(.bold)
     }
     .onAppear {
-      play(sound: "marimba_shake.mp3")
+      play(clip: "marimba_shake")
     }
   }
 

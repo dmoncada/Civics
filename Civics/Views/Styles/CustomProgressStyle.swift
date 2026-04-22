@@ -31,6 +31,12 @@ struct CustomProgressStyle: ProgressViewStyle {
   }
 }
 
+extension ProgressViewStyle where Self == CustomProgressStyle {
+  static var custom: CustomProgressStyle {
+    CustomProgressStyle()
+  }
+}
+
 #Preview {
   @Previewable @State var count = 3
 
@@ -41,7 +47,7 @@ struct CustomProgressStyle: ProgressViewStyle {
       Text("\(count) of \(total)")
         .contentTransition(.numericText())
     }
-    .progressViewStyle(CustomProgressStyle())
+    .progressViewStyle(.custom)
 
     Button("Add") {
       withAnimation {

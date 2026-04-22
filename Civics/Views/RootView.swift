@@ -7,12 +7,13 @@ struct RootView: View {
   private var unionState: UnionState = .wa
 
   @AppStorage(AppStorageKey.duration.rawValue)
-  private var duration = 30
+  private var storedDuration = 30
 
+  @State private var duration = 30
   @State private var showSettings = false
-  @State private var localDuration = 30
 
-  var onComplete: () -> Void = {}
+  var onPrep: () -> Void = {}
+  var onTest: () -> Void = {}
 
   var body: some View {
     VStack {
@@ -35,8 +36,13 @@ struct RootView: View {
         }
         .bold()
 
-        WideButton(title: "Start") {
-          onComplete()
+        WideButton(title: "Prep") {
+          onPrep()
+        }
+        .bold()
+
+        WideButton(title: "Test") {
+          onTest()
         }
         .bold()
       }
@@ -44,15 +50,15 @@ struct RootView: View {
     .sheet(isPresented: $showSettings) {
       SettingsView(
         selectedState: $unionState,
-        selectedDuration: $localDuration
+        selectedDuration: $duration
       )
       .presentationDetents([.fraction(1 / 3)])
     }
     .onAppear {
-      localDuration = duration
+      duration = storedDuration
     }
-    .onChange(of: localDuration) {
-      duration = localDuration
+    .onChange(of: duration) {
+      storedDuration = duration
     }
     .task(id: unionState) {
       do {

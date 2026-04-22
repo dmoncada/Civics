@@ -7,11 +7,13 @@ struct PreparationView: View {
   @State private var flippedCards: Set<Int> = []
 
   private let step = 10
+  private let cardHeight: CGFloat = 400
+  private let cardMaxWidth: CGFloat = 200
 
   var body: some View {
     VStack(spacing: 16) {
       GeometryReader { reader in
-        let sideInset = (reader.size.width - 250) / 2
+        let sideInset = (reader.size.width - cardMaxWidth) / 2
 
         ScrollView(.horizontal) {
           LazyHStack(spacing: 16) {
@@ -19,9 +21,7 @@ struct PreparationView: View {
               cardView(for: i, isFlipped: flippedCards.contains(i))
                 .id(i)
                 .onTapGesture {
-                  if flippedCards.contains(i) {
-                    flippedCards.remove(i)
-                  } else {
+                  if flippedCards.remove(i) == nil {
                     flippedCards.insert(i)
                   }
                 }
@@ -29,7 +29,6 @@ struct PreparationView: View {
           }
           .scrollTargetLayout()
         }
-        .border(.blue)
         .contentMargins(.horizontal, sideInset)
         .scrollTargetBehavior(.viewAligned)
         .scrollPosition(id: $currentIndex)
@@ -39,13 +38,14 @@ struct PreparationView: View {
         WideButton(title: "First") {
           updateIndex(0)
         }
+        .bold()
 
-        IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offset: .vertical(1)) {
+        IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offsets: [.vertical(1)]) {
           let index = currentIndex ?? 0
           updateIndex(index - step)
         }
 
-        IconButton(systemImage: "10.arrow.trianglehead.clockwise", offset: .vertical(1)) {
+        IconButton(systemImage: "10.arrow.trianglehead.clockwise", offsets: [.vertical(1)]) {
           let index = currentIndex ?? 0
           updateIndex(index + step)
         }
@@ -53,11 +53,14 @@ struct PreparationView: View {
         WideButton(title: "Last") {
           updateIndex(vm.count - 1)
         }
+        .bold()
       }
     }
   }
+}
 
-  func updateIndex(_ next: Int) {
+extension PreparationView {
+  fileprivate func updateIndex(_ next: Int) {
     let next = next.clamped(to: 0 ... vm.count - 1)
     withAnimation(.easeInOut(duration: 0.75)) {
       currentIndex = next
@@ -65,55 +68,78 @@ struct PreparationView: View {
   }
 
   @ViewBuilder
-  func cardView(for id: Int, isFlipped: Bool) -> some View {
+  fileprivate func cardView(for id: Int, isFlipped: Bool) -> some View {
     let question = vm.question(id: id)
     let answers = vm.answers(for: id)
 
     FlippableCard(isFlipped: isFlipped) {
-      frontView(question, id: id)
+      cardFront(question, id: id)
 
     } back: {
-      backView(answers)
+      cardBack(answers)
         .rotation3DEffect(.degrees(180), axis: (0, 1, 0))
     }
-    .frame(width: 250, height: 500)
+    .frame(height: cardHeight)
+    .frame(maxWidth: cardMaxWidth)
   }
 
-  func frontView(_ question: String, id: Int) -> some View {
+  fileprivate func cardFront(_ question: String, id: Int) -> some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 16)
-        .fill(.red.opacity(0.5))
+      cardBackground(.red)
 
       VStack {
         Text("Question #\(id + 1)")
+          .font(.caption)
+          .padding(.top, 8)
+
+        Spacer()
+
         Text(question.replaceEmphasized(with: .underline))
           .multilineTextAlignment(.center)
           .foregroundStyle(.primary)
-          .font(.title2.bold())
-          .background(.pink)
+          .font(.title3.bold())
+
+        Spacer()
       }
       .padding()
-      .border(.red)
     }
   }
 
-  func backView(_ answers: [String]) -> some View {
+  fileprivate func cardBack(_ answers: [String]) -> some View {
     ZStack {
-      RoundedRectangle(cornerRadius: 16)
-        .fill(.blue.opacity(0.5))
+      cardBackground(.blue)
 
-      ScrollView(.vertical) {
-        VStack(alignment: .leading, spacing: 8) {
-          ForEach(answers, id: \.self) { answer in
-            AnswerRow(answer: answer, font: .title3)
-              .background(.pink)
-          }
+      ViewThatFits(in: .vertical) {
+        answerStack(answers)
+
+        ScrollView(.vertical) {
+          answerStack(answers)
         }
-        .containerRelativeFrame(.vertical, alignment: .center)
       }
       .padding()
-      .border(.red)
     }
+  }
+
+  fileprivate func answerStack(_ answers: [String]) -> some View {
+    VStack(alignment: .center, spacing: 8) {
+      ForEach(answers, id: \.self) { answer in
+        AnswerRow(answer: answer, font: .body)
+      }
+    }
+  }
+
+  @ViewBuilder
+  fileprivate func cardBackground(_ color: Color) -> some View {
+    RoundedRectangle(cornerRadius: 16)
+      .fill(.white)
+
+    RoundedRectangle(cornerRadius: 12)
+      .fill(color)
+      .overlay(
+        RoundedRectangle(cornerRadius: 12)
+          .fill(.white.opacity(0.5))
+      )
+      .padding(8)
   }
 }
 

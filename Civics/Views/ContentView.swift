@@ -1,6 +1,7 @@
 import SwiftUI
 
 enum Screen: Hashable {
+  case prepare
   case countdown
   case questions
   case results
@@ -15,6 +16,8 @@ struct ContentView: View {
     NavigationStack(path: $path) {
       ScreenContainer {
         RootView {
+          path.append(Screen.prepare)
+        } onTest: {
           path.append(Screen.countdown)
         }
       }
@@ -38,27 +41,33 @@ struct ContentView: View {
   private func screenView(for screen: Screen) -> some View {
     Group {
       switch screen {
+      case .prepare:
+        ScreenContainer {
+          PreparationView()
+        }
       case .countdown:
         ScreenContainer {
           CountdownView {
             path.append(Screen.questions)
           }
         }
+        .navigationBarBackButtonHidden()
       case .questions:
         ScreenContainer {
           QuestionsView {
             path.append(Screen.results)
           }
         }
+        .navigationBarBackButtonHidden()
       case .results:
         ScreenContainer {
           ResultsView {
             path = NavigationPath()
           }
         }
+        .navigationBarBackButtonHidden()
       }
     }
-    .navigationBarBackButtonHidden()
   }
 }
 

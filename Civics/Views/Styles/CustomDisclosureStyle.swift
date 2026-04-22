@@ -14,10 +14,9 @@ struct CustomDisclosureStyle: DisclosureGroupStyle {
 
           Spacer()
 
-          // Image(systemName: "chevron.right")
-          Image(systemName: "info.circle")
+          Image(systemName: "chevron.right")
             .fontWeight(.medium)
-            // .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
+            .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0))
             .animation(.easeInOut(duration: 0.25), value: configuration.isExpanded)
         }
         .contentShape(Rectangle())
@@ -29,5 +28,11 @@ struct CustomDisclosureStyle: DisclosureGroupStyle {
         configuration.content
       }
     }
+  }
+}
+
+extension DisclosureGroupStyle where Self == CustomDisclosureStyle {
+  static var custom: CustomDisclosureStyle {
+    CustomDisclosureStyle()
   }
 }

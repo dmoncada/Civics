@@ -84,7 +84,7 @@ struct QuestionsView: View {
       Text("\(count) of \(limit)")
         .contentTransition(.numericText())
     }
-    .progressViewStyle(CustomProgressStyle())
+    .progressViewStyle(.custom)
     .animation(.default, value: count)
   }
 

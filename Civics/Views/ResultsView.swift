@@ -33,7 +33,7 @@ struct ResultsView: View {
                 .foregroundColor(correct ? .primary : .secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .disclosureGroupStyle(CustomDisclosureStyle())
+            .disclosureGroupStyle(.custom)
           }
         }
         .padding()

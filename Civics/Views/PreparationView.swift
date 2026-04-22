@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PreparationView: View {
-  @State var vm = GameViewModel()
+  @Environment(GameViewModel.self) private var vm
 
   @State private var currentIndex: Int? = 0
   @State private var flippedCards: Set<Int> = []
@@ -90,8 +90,10 @@ struct PreparationView: View {
           .multilineTextAlignment(.center)
           .foregroundStyle(.primary)
           .font(.title2.bold())
-          .border(.red)
+          .background(.pink)
       }
+      .padding()
+      .border(.red)
     }
   }
 
@@ -100,11 +102,16 @@ struct PreparationView: View {
       RoundedRectangle(cornerRadius: 16)
         .fill(.blue.opacity(0.5))
 
-      VStack(alignment: .leading, spacing: 8) {
-        ForEach(answers, id: \.self) { answer in
-          AnswerRow(answer: answer, font: .title3)
+      ScrollView(.vertical) {
+        VStack(alignment: .leading, spacing: 8) {
+          ForEach(answers, id: \.self) { answer in
+            AnswerRow(answer: answer, font: .title3)
+              .background(.pink)
+          }
         }
+        .containerRelativeFrame(.vertical, alignment: .center)
       }
+      .padding()
       .border(.red)
     }
   }
@@ -113,8 +120,9 @@ struct PreparationView: View {
 #Preview {
   let vm = GameViewModel()
   ScreenContainer {
-    PreparationView(vm: vm)
+    PreparationView()
   }
+  .environment(vm)
   .task {
     try? await vm.setState(.wa)
   }

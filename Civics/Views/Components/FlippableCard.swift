@@ -38,7 +38,6 @@ struct FlippableCard<Front: View, Back: View>: View {
 
       Text("Question")
         .foregroundStyle(.white)
-        .padding()
     }
 
   } back: {

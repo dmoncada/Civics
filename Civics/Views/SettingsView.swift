@@ -7,11 +7,10 @@ struct SettingsView: View {
   @Binding var selectedDuration: Int
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 24) {
+    VStack(alignment: .center, spacing: 24) {
       StatePicker(selected: $selectedState)
       DurationPicker(selected: $selectedDuration)
     }
-    .presentationDetents([.medium])
   }
 }
 
@@ -28,5 +27,6 @@ struct SettingsView: View {
       selectedState: $state,
       selectedDuration: $duration
     )
+    .presentationDetents([.medium])
   }
 }

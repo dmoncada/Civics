@@ -9,41 +9,44 @@ struct RootView: View {
   @AppStorage(AppStorageKey.duration.rawValue)
   private var duration = 30
 
-  @State private var showSheet = false
+  @State private var showSettings = false
   @State private var localDuration = 30
 
   var onComplete: () -> Void = {}
 
   var body: some View {
     VStack {
+      Spacer()
+
       Text("Civics")
-        .font(.largeTitle)
-        .fontWeight(.bold)
+        .font(.largeTitle.bold())
         .foregroundStyle(.primary)
 
       Text("Get Ready for your Test!")
-        .font(.title2)
-        .fontWeight(.bold)
+        .font(.title2.bold())
         .foregroundStyle(.secondary)
         .underline()
 
+      Spacer()
+
       HStack(spacing: 8) {
         IconButton(systemImage: "gearshape") {
-          showSheet = true
+          showSettings = true
         }
-        .fontWeight(.bold)
+        .bold()
 
         WideButton(title: "Start") {
           onComplete()
         }
-        .fontWeight(.bold)
+        .bold()
       }
     }
-    .sheet(isPresented: $showSheet) {
+    .sheet(isPresented: $showSettings) {
       SettingsView(
         selectedState: $unionState,
         selectedDuration: $localDuration
       )
+      .presentationDetents([.fraction(1 / 3)])
     }
     .onAppear {
       localDuration = duration

@@ -14,11 +14,17 @@ class AudioManager {
     "marimba_shake",
   ]
 
+  private init() {
+    try? preloadClips()
+  }
+
   private var players = [String: AVAudioPlayer]()
 
   func configureSession() throws {
+    #if os(iOS)
     let session = AVAudioSession.sharedInstance()
     try session.setCategory(.ambient)
+    #endif
   }
 
   func preloadClips() throws {

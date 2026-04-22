@@ -42,9 +42,7 @@ struct QuestionsView: View {
       ScrollView(.vertical) {
         VStack(alignment: .leading, spacing: 8) {
           ForEach(vm.currentAnswers, id: \.self) { answer in
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-              AnswerRow(answer: answer, font: .title3)
-            }
+            AnswerRow(answer: answer, font: .title3)
           }
         }
       }

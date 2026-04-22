@@ -38,6 +38,7 @@ class AudioManager {
   }
 
   func preload(clip: String) throws {
+    guard players[clip] == nil else { return }
     guard let url = Bundle.main.url(forResource: clip, withExtension: "mp3") else {
       throw Error.fileNotFound(name: clip)
     }

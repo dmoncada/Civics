@@ -10,12 +10,12 @@ struct QuestionsView: View {
 
   var onComplete: () -> Void = {}
 
-  private let limit = GameViewModel.maxQuestionsCount
-
   var body: some View {
     verticalContent
       .onChange(of: vm.responses.count) {
-        if timeRemaining > 0 && vm.responses.count == limit {
+        guard timeRemaining > 0 else { return }
+
+        if vm.isPassing || vm.isFailing {
           onComplete()
         }
       }
@@ -30,8 +30,10 @@ struct QuestionsView: View {
         }
       }
   }
+}
 
-  var verticalContent: some View {
+extension QuestionsView {
+  fileprivate var verticalContent: some View {
     VStack(spacing: 16) {
       Text(vm.currentQuestion.replaceEmphasized(with: .underline))
         .font(.title2)
@@ -50,8 +52,8 @@ struct QuestionsView: View {
       progressBar
 
       HStack {
-        responseButton(false)
         responseButton(true)
+        responseButton(false)
       }
 
       countdownTimer
@@ -59,7 +61,7 @@ struct QuestionsView: View {
   }
 
   @ViewBuilder
-  private func responseButton(_ correct: Bool) -> some View {
+  fileprivate func responseButton(_ correct: Bool) -> some View {
     let title = correct ? "Correct" : "Incorrect"
     let tint = correct ? Color.correct : .incorrect
     let clip = "marimba_\(correct ? "positive" : "negative")"
@@ -67,7 +69,7 @@ struct QuestionsView: View {
     WideButton(title: title) {
       vm.respond(correct)
 
-      if vm.responses.count < limit {
+      if vm.isPassing == false && vm.isFailing == false {
         play(clip: clip)
       }
     }
@@ -79,23 +81,23 @@ struct QuestionsView: View {
   @ViewBuilder
   private var progressBar: some View {
     let count = vm.responses.count
+    let total = GameViewModel.maxQuestionsCount
 
-    ProgressView(value: Double(count), total: Double(limit)) {
-      Text("\(count) of \(limit)")
-        .contentTransition(.numericText())
+    ProgressView(value: Double(vm.correctCount), total: Double(total)) {
+      Text("\(total - count) questions left")
+        .contentTransition(.numericText(countsDown: true))
     }
-    .progressViewStyle(.custom)
+    .progressViewStyle(.double(secondary: Double(vm.incorrectCount) / Double(total)))
     .animation(.default, value: count)
   }
 
   @ViewBuilder
-  private var countdownTimer: some View {
+  fileprivate var countdownTimer: some View {
     let duration = Duration.seconds(timeRemaining)
     let formatted = duration.formatted(.time(pattern: .minuteSecond))
 
     Text(formatted)
-      .font(.title)
-      .fontWeight(.bold)
+      .font(.title.bold())
       .monospacedDigit()
   }
 }

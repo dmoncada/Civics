@@ -7,6 +7,8 @@ class GameViewModel {
   static let minPassingCount = 12
 
   private(set) var responses = [(index: Int, correct: Bool)]()
+  private(set) var correctCount = 0
+  private(set) var incorrectCount = 0
 
   private(set) var unionState: UnionState? = nil
   private(set) var senators: [Senator] = []
@@ -17,6 +19,8 @@ class GameViewModel {
   private var currentIndex = 0
 
   var count: Int { questions.count }
+  var isPassing: Bool { correctCount >= Self.minPassingCount }
+  var isFailing: Bool { incorrectCount > Self.maxQuestionsCount - Self.minPassingCount }
 
   init() {
     guard let data = try? CivicsDataLoader.load() else { fatalError() }
@@ -28,7 +32,10 @@ class GameViewModel {
   func reset() {
     questionIndices.shuffle()
     currentIndex = 0
+
     responses = []
+    correctCount = 0
+    incorrectCount = 0
   }
 
   func setState(_ state: UnionState) async throws {
@@ -49,6 +56,11 @@ class GameViewModel {
 
   func respond(_ correct: Bool) {
     responses.append((questionIndex, correct))
+    if correct {
+      correctCount += 1
+    } else {
+      incorrectCount += 1
+    }
     next()
   }
 

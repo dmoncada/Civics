@@ -3,7 +3,7 @@ import SwiftUI
 struct PreparationView: View {
   @Environment(GameViewModel.self) private var vm
 
-  @State private var currentIndex: Int? = 0
+  @State private var currentIndex: Int = 0
   @State private var flippedCards: Set<Int> = []
 
   private let step = 10
@@ -15,58 +15,57 @@ struct PreparationView: View {
       GeometryReader { reader in
         let sideInset = (reader.size.width - cardMaxWidth) / 2
 
-        ScrollView(.horizontal) {
-          LazyHStack(spacing: 16) {
-            ForEach(0 ..< vm.count, id: \.self) { i in
-              cardView(for: i, isFlipped: flippedCards.contains(i))
-                .id(i)
-                .onTapGesture {
-                  if flippedCards.remove(i) == nil {
-                    flippedCards.insert(i)
+        ScrollViewReader { proxy in
+          ScrollView(.horizontal) {
+            LazyHStack(spacing: 16) {
+              ForEach(0 ..< vm.count, id: \.self) { i in
+                cardView(for: i, isFlipped: flippedCards.contains(i))
+                  .id(i)
+                  .onTapGesture {
+                    if flippedCards.remove(i) == nil {
+                      flippedCards.insert(i)
+                    }
                   }
-                }
+              }
+            }
+            .scrollTargetLayout()
+          }
+          .contentMargins(.horizontal, sideInset)
+          .scrollTargetBehavior(.viewAligned)
+          .onScrollTargetVisibilityChange(idType: Int.self) { ids in
+            if let id = ids.first {
+              currentIndex = id
             }
           }
-          .scrollTargetLayout()
-        }
-        .contentMargins(.horizontal, sideInset)
-        .scrollTargetBehavior(.viewAligned)
-        .scrollPosition(id: $currentIndex)
-      }
 
-      HStack(spacing: 4) {
-        WideButton(title: "First") {
-          updateIndex(0)
-        }
-        .bold()
+          HStack(spacing: 4) {
+            WideButton(title: "First") {
+              proxy.scroll(to: 0)
+            }
+            .bold()
 
-        IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offsets: [.vertical(1)]) {
-          let index = currentIndex ?? 0
-          updateIndex(index - step)
-        }
+            IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offsets: [.vertical(1)]) {
+              let index = (currentIndex - step).clamped(to: 0 ... vm.count - 1)
+              proxy.scroll(to: index)
+            }
 
-        IconButton(systemImage: "10.arrow.trianglehead.clockwise", offsets: [.vertical(1)]) {
-          let index = currentIndex ?? 0
-          updateIndex(index + step)
-        }
+            IconButton(systemImage: "10.arrow.trianglehead.clockwise", offsets: [.vertical(1)]) {
+              let index = (currentIndex + step).clamped(to: 0 ... vm.count - 1)
+              proxy.scroll(to: index)
+            }
 
-        WideButton(title: "Last") {
-          updateIndex(vm.count - 1)
+            WideButton(title: "Last") {
+              proxy.scroll(to: vm.count - 1)
+            }
+            .bold()
+          }
         }
-        .bold()
       }
     }
   }
 }
 
 extension PreparationView {
-  fileprivate func updateIndex(_ next: Int) {
-    let next = next.clamped(to: 0 ... vm.count - 1)
-    withAnimation(.easeInOut(duration: 0.75)) {
-      currentIndex = next
-    }
-  }
-
   @ViewBuilder
   fileprivate func cardView(for id: Int, isFlipped: Bool) -> some View {
     let question = vm.question(id: id)
@@ -140,6 +139,14 @@ extension PreparationView {
           .fill(.white.opacity(0.5))
       )
       .padding(8)
+  }
+}
+
+extension ScrollViewProxy {
+  fileprivate func scroll(to id: Int) {
+    withAnimation(.easeInOut(duration: 0.75)) {
+      self.scrollTo(id)
+    }
   }
 }
 

@@ -36,9 +36,11 @@ struct ContentView: View {
       }
     }
   }
+}
 
+extension ContentView {
   @ViewBuilder
-  private func screenView(for screen: Screen) -> some View {
+  fileprivate func screenView(for screen: Screen) -> some View {
     Group {
       switch screen {
       case .prepare:

@@ -23,7 +23,7 @@ struct RootView: View {
         .font(.largeTitle.bold())
         .foregroundStyle(.primary)
 
-      Text("Get Ready for your Test!")
+      Text("Prepare for your Test!")
         .font(.title2.bold())
         .foregroundStyle(.secondary)
         .underline()
@@ -34,7 +34,6 @@ struct RootView: View {
         IconButton(systemImage: "gearshape") {
           showSettings = true
         }
-        .bold()
 
         WideButton(title: "Prep") {
           onPrep()

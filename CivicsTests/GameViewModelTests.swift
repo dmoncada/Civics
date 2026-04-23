@@ -41,4 +41,20 @@ struct CivicsTests {
 
     #expect(count == all.count)
   }
+
+  @Test
+  func testPassing() {
+    let vm = GameViewModel()
+    let passingCount = GameViewModel.minPassingCount
+
+    for _ in 1 ..< passingCount {
+      vm.respond(true)
+    }
+
+    #expect(vm.isPassing == false)
+
+    vm.respond(true)
+
+    #expect(vm.isPassing)
+  }
 }

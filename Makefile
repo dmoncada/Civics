@@ -25,3 +25,12 @@ pre-commit:
 	echo 'PRECOMMIT_NOFMT=$${PRECOMMIT_NOFMT} $$(git rev-parse --show-toplevel)/.git/hooks/pre-commit.fmt' >> /tmp/pre-commit.new
 	mv /tmp/pre-commit.new .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
+
+.PHONY: test
+test:
+	@xcodebuild \
+		-project Civics.xcodeproj \
+		-scheme CivicsTests \
+		-destination 'platform=macOS' \
+		test \
+	| xcbeautify

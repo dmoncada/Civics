@@ -7,10 +7,8 @@ struct ResultsView: View {
 
   var body: some View {
     VStack(spacing: 16) {
-      let correctCount = vm.responses.count(where: \.correct)
-      Text("You got ^[\(correctCount) question](inflect: true) \(getIcon(correctCount))")
-        .font(.title2)
-        .fontWeight(.bold)
+      Text("You got ^[\(vm.correctCount) question](inflect: true) \(getIcon(vm.correctCount))")
+        .font(.title2.bold())
 
       ScrollView(.vertical) {
         VStack(spacing: 8) {
@@ -42,7 +40,7 @@ struct ResultsView: View {
       WideButton(title: "Restart") {
         onCompleted()
       }
-      .fontWeight(.bold)
+      .bold()
     }
     .onAppear {
       play(clip: "marimba_shake")

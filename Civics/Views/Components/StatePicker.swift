@@ -3,7 +3,7 @@ import SwiftUI
 struct StatePicker: View {
   @Binding var selected: UnionState
 
-  private let sorted = UnionState.allCases.sorted(using: KeyPathComparator(\.code))
+  private let sorted = UnionState.allCases.sorted { $0.code < $1.code }
 
   var body: some View {
     Picker("State", selection: $selected) {

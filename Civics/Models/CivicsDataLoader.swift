@@ -10,6 +10,6 @@ struct CivicsDataLoader {
     let data = try Data(contentsOf: url)
     let decoded = try JSONDecoder().decode(CivicsData.self, from: data)
     let questions = decoded.sections.flatMap { $0.subsections.flatMap { $0.questions } }
-    return questions.sorted(using: KeyPathComparator(\.id))
+    return questions.sorted { $0.id < $1.id }
   }
 }

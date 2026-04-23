@@ -24,7 +24,7 @@ class GameViewModel {
 
   init() {
     guard let data = try? CivicsDataLoader.load() else { fatalError() }
-    questions = data.sorted(using: KeyPathComparator(\.id))
+    questions = data.sorted { $0.id < $1.id }
     questionIndices = Array(0 ..< questions.count)
     reset()
   }
@@ -45,11 +45,15 @@ class GameViewModel {
     async let task1 = service.fetchSenators(for: state)
     async let task2 = service.fetchRepresentatives(for: state)
 
-    let comparator1 = KeyPathComparator(\Senator.nameComponents.familyName)
-    let comparator2 = KeyPathComparator(\Representative.district)
+    senators = try await task1.sorted {
+      ($0.nameComponents.familyName ?? "")
+        < ($1.nameComponents.familyName ?? "")
+    }
 
-    senators = try await task1.sorted(using: comparator1)
-    representatives = try await task2.sorted(using: comparator2)
+    representatives = try await task2.sorted {
+      ($0.district ?? 0)
+        < ($1.district ?? 0)
+    }
 
     unionState = state
   }

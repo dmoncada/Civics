@@ -45,6 +45,7 @@ struct ContentView: View {
         ScreenContainer {
           PreparationView()
         }
+
       case .countdown:
         ScreenContainer {
           CountdownView {
@@ -52,6 +53,7 @@ struct ContentView: View {
           }
         }
         .navigationBarBackButtonHidden()
+
       case .questions:
         ScreenContainer {
           QuestionsView {
@@ -59,6 +61,7 @@ struct ContentView: View {
           }
         }
         .navigationBarBackButtonHidden()
+
       case .results:
         ScreenContainer {
           ResultsView {

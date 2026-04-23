@@ -6,23 +6,18 @@ struct DurationPicker: View {
   private let values = Array(stride(from: 30, through: 300, by: 30))
 
   var body: some View {
-    HStack(spacing: 8) {
-      IconButton(systemImage: "minus") {
-        decrement()
-      }
-      .disabled(isMin)
-
+    Stepper {
       let duration = Duration.seconds(selected)
-
-      Text(duration.formatted(.time(pattern: .minuteSecond)))
-        .font(.system(size: 40, weight: .semibold, design: .rounded))
+      let formatted = duration.formatted(.time(pattern: .minuteSecond))
+      Text("Time: \(formatted)")
         .contentTransition(.numericText())
         .monospacedDigit()
 
-      IconButton(systemImage: "plus") {
-        increment()
-      }
-      .disabled(isMax)
+    } onIncrement: {
+      increment()
+
+    } onDecrement: {
+      decrement()
     }
   }
 

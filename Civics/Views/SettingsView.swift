@@ -7,10 +7,23 @@ struct SettingsView: View {
   @Binding var selectedDuration: Int
 
   var body: some View {
-    List {
-      Section {
-        StatePicker(selected: $selectedState)
-        DurationPicker(selected: $selectedDuration)
+    NavigationStack {
+      List {
+        Section {
+          StatePicker(selected: $selectedState)
+          DurationPicker(selected: $selectedDuration)
+        } header: {
+          Text("Test Settings")
+        }
+      }
+      .navigationTitle("Settings")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button("Done") {
+            dismiss()
+          }
+        }
       }
     }
   }

@@ -39,10 +39,15 @@ func extractNickname(from name: String) throws -> (String, String?) {
 func countdown(from start: Int) -> AsyncStream<Int> {
   AsyncStream { continuation in
     Task {
+      let startTime = ContinuousClock.now
+
       for i in (0 ... start).reversed() {
         continuation.yield(i)
-        try? await Task.sleep(for: .seconds(1))
+
+        let target = startTime + .seconds(start - i + 1)
+        try? await Task.sleep(until: target, clock: .continuous)
       }
+
       continuation.finish()
     }
   }

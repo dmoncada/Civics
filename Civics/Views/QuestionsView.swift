@@ -15,7 +15,11 @@ struct QuestionsView: View {
       .onChange(of: vm.responses.count) {
         guard timeRemaining > 0 else { return }
 
-        if vm.isPassing || vm.isFailing {
+        // if vm.isPassing || vm.isFailing {
+        //     onComplete()
+        // }
+
+        if vm.responses.count == GameViewModel.maxQuestionsCount {
           onComplete()
         }
       }
@@ -36,9 +40,9 @@ extension QuestionsView {
   fileprivate var verticalContent: some View {
     VStack(spacing: 16) {
       Text(vm.currentQuestion.replaceEmphasized(with: .underline))
-        .font(.title2)
-        .fontWeight(.bold)
+        .font(.title2.bold())
         .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
         .frame(height: 150)
 
       ScrollView(.vertical) {
@@ -49,14 +53,14 @@ extension QuestionsView {
         }
       }
 
+      countdownTimer
+
       progressBar
 
       HStack {
         responseButton(true)
         responseButton(false)
       }
-
-      countdownTimer
     }
   }
 
@@ -69,7 +73,11 @@ extension QuestionsView {
     WideButton(title: title) {
       vm.respond(correct)
 
-      if vm.isPassing == false && vm.isFailing == false {
+      // if vm.isPassing == false && vm.isFailing == false {
+      //  play(clip: clip)
+      // }
+
+      if vm.responses.count < GameViewModel.maxQuestionsCount {
         play(clip: clip)
       }
     }
@@ -82,13 +90,10 @@ extension QuestionsView {
   private var progressBar: some View {
     let count = vm.responses.count
     let total = GameViewModel.maxQuestionsCount
+    let responses = vm.responses.map { $0.correct }
 
-    ProgressView(value: Double(vm.correctCount), total: Double(total)) {
-      Text("\(total - count) questions left")
-        .contentTransition(.numericText(countsDown: true))
-    }
-    .progressViewStyle(.double(secondary: Double(vm.incorrectCount) / Double(total)))
-    .animation(.default, value: count)
+    CustomProgressView(responses: responses, total: total)
+      .animation(.default, value: count)
   }
 
   @ViewBuilder

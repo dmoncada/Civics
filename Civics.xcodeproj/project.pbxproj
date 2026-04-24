@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DC019FDB2F95A0FC00DE4E2F /* User.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DC019FDA2F95A0FC00DE4E2F /* User.xcconfig */; };
+		DCC2E6AA2F9B02930036D124 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DCC2E6A92F9B02930036D124 /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DCC2E6AA2F9B02930036D124 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +113,7 @@
 			);
 			name = Civics;
 			packageProductDependencies = (
+				DCC2E6A92F9B02930036D124 /* ConfettiSwiftUI */,
 			);
 			productName = Civics;
 			productReference = DC04BE272EBC18DA003863CF /* Civics.app */;
@@ -168,6 +171,7 @@
 			mainGroup = DC5A41FF2EBBECCD00D52DBF;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				DCC2E6A82F9B02930036D124 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DC5A41FF2EBBECCD00D52DBF;
@@ -534,6 +538,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DCC2E6A82F9B02930036D124 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DCC2E6A92F9B02930036D124 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DCC2E6A82F9B02930036D124 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DC5A42002EBBECCD00D52DBF /* Project object */;
 }

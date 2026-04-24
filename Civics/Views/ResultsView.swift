@@ -1,7 +1,10 @@
+import ConfettiSwiftUI
 import SwiftUI
 
 struct ResultsView: View {
   @Environment(GameViewModel.self) private var vm
+
+  @State private var confetti = 0
 
   var onCompleted: () -> Void = {}
 
@@ -9,9 +12,10 @@ struct ResultsView: View {
     VStack(spacing: 16) {
       Text("You got ^[\(vm.correctCount) question](inflect: true) \(getIcon(vm.correctCount))")
         .font(.title2.bold())
+        .confettiCannon(trigger: $confetti, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 180), radius: 200, repetitions: 3, repetitionInterval: 0.25)
 
       ScrollView(.vertical) {
-        VStack(spacing: 8) {
+        VStack(spacing: 16) {
           ForEach(vm.responses, id: \.index) { item in
             let (id, correct) = item
             let question = vm.question(id: id)
@@ -43,7 +47,13 @@ struct ResultsView: View {
       .bold()
     }
     .onAppear {
-      play(clip: "marimba_shake")
+      if vm.isPassing {
+        play(clip: "ta_da_brass")
+        confetti += 1
+
+      } else {
+        play(clip: "marimba_shake")
+      }
     }
   }
 

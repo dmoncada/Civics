@@ -12,6 +12,7 @@ class AudioManager {
     "marimba_negative",
     "marimba_positive",
     "marimba_shake",
+    "ta_da_brass",
   ]
 
   private init() {

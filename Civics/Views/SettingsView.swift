@@ -17,6 +17,7 @@ struct SettingsView: View {
         }
       }
       .navigationTitle("Settings")
+      #if !os(macOS)
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
@@ -25,6 +26,7 @@ struct SettingsView: View {
           }
         }
       }
+      #endif
     }
   }
 }

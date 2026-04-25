@@ -16,12 +16,12 @@ struct CustomProgressView: View {
 
   var body: some View {
     VStack(spacing: 0) {
-      GeometryReader { geo in
-        let width = min(geo.size.width, maxWidth)
-        let totalSpacing = spacing * CGFloat(total - 1)
-        let itemWidth = (width - totalSpacing) / CGFloat(total)
+      GeometryReader { reader in
+        let width = min(reader.size.width, maxWidth)
+        let spacing = self.spacing * CGFloat(total - 1)
+        let itemWidth = (width - spacing) / CGFloat(total)
 
-        HStack(spacing: spacing) {
+        HStack(spacing: self.spacing) {
           ForEach(responses.indices, id: \.self) { index in
             Rectangle()
               .fill(color(for: responses[index]))
@@ -34,19 +34,16 @@ struct CustomProgressView: View {
       .frame(maxHeight: maxHeight)
 
       HStack {
-        Label("**\(correctCount)** correct")
+        Label(correctCount, description: "correct")
         Spacer()
-        Label("**\(incorrectCount)** incorrect")
+        Label(incorrectCount, description: "incorrect")
       }
       .frame(maxWidth: maxWidth)
     }
   }
 
-  @ViewBuilder
-  private func Label(_ text: String) -> some View {
-    let attributed = (try? AttributedString(markdown: text)) ?? AttributedString(text)
-
-    Text(attributed)
+  private func Label(_ count: Int, description: String) -> some View {
+    Text("\(Text(count.description).bold()) \(description)")
       .font(.footnote)
       .foregroundStyle(.gray)
       .monospacedDigit()
@@ -60,7 +57,7 @@ struct CustomProgressView: View {
     switch correct {
     case true: return .correct
     case false: return .incorrect
-    case nil: return Color.gray.opacity(0.25)
+    case nil: return .gray.opacity(0.25)
     }
   }
 }

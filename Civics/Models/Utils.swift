@@ -43,7 +43,6 @@ func countdown(from start: Int) -> AsyncStream<Int> {
 
       for i in (0 ... start).reversed() {
         continuation.yield(i)
-
         let target = startTime + .seconds(start - i + 1)
         try? await Task.sleep(until: target, clock: .continuous)
       }

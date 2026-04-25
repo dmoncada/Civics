@@ -17,6 +17,7 @@ struct ContentView: View {
       ScreenContainer {
         RootView {
           path.append(Screen.prepare)
+
         } onTest: {
           path.append(Screen.countdown)
         }

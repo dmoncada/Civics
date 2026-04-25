@@ -35,12 +35,12 @@ struct RootView: View {
           showSettings = true
         }
 
-        WideButton(title: "Prep") {
+        WideButton(title: "Prep", systemImage: "book") {
           onPrep()
         }
         .bold()
 
-        WideButton(title: "Test") {
+        WideButton(title: "Test", systemImage: "person.2") {
           onTest()
         }
         .bold()

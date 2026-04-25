@@ -27,6 +27,14 @@ struct IconButton: View {
 
   init(
     systemImage: String,
+    offset: AlignmentOffset,
+    action: @escaping () -> Void
+  ) {
+    self.init(systemImage: systemImage, offsets: [offset], action: action)
+  }
+
+  init(
+    systemImage: String,
     offsets: [AlignmentOffset] = [],
     action: @escaping () -> Void
   ) {
@@ -40,6 +48,7 @@ struct IconButton: View {
 
     Button {
       action()
+
     } label: {
       Image(systemName: systemImage)
         .font(.system(size: 24))
@@ -56,6 +65,7 @@ struct IconButton: View {
   HStack {
     IconButton(systemImage: "plus") {}
     IconButton(systemImage: "minus") {}
+    IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offset: .vertical(1)) {}
     IconButton(systemImage: "10.arrow.trianglehead.counterclockwise", offsets: [.vertical(1)]) {}
   }
 }

@@ -52,6 +52,7 @@ extension QuestionsView {
           }
         }
       }
+      .scrollBounceBehavior(.basedOnSize)
 
       countdownTimer
 

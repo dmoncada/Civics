@@ -40,6 +40,7 @@ struct ResultsView: View {
         }
         .padding()
       }
+      .scrollBounceBehavior(.basedOnSize)
 
       WideButton(title: "Restart") {
         onCompleted()

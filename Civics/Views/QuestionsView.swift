@@ -12,20 +12,13 @@ struct QuestionsView: View {
 
   var body: some View {
     verticalContent
-      .onChange(of: vm.responses.count) {
-        guard timeRemaining > 0 else { return }
-
-        // if vm.isPassing || vm.isFailing {
-        //     onComplete()
-        // }
-
-        if vm.responses.count == GameViewModel.maxQuestionsCount {
-          onComplete()
-        }
-      }
       .task {
         for await i in countdown(from: duration) {
           timeRemaining = i
+        }
+
+        if vm.isFinished {
+          return
         }
 
         if timeRemaining == 0 {
@@ -72,14 +65,17 @@ extension QuestionsView {
     let clip = "marimba_\(correct ? "positive" : "negative")"
 
     WideButton(title: title) {
+      if vm.isFinished {
+        return
+      }
+
       vm.respond(correct)
+      play(clip: clip)
 
-      // if vm.isPassing == false && vm.isFailing == false {
-      //  play(clip: clip)
-      // }
-
-      if vm.responses.count < GameViewModel.maxQuestionsCount {
-        play(clip: clip)
+      if vm.isFinished {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+          onComplete()
+        }
       }
     }
     .foregroundStyle(.primary)

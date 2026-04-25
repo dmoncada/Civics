@@ -30,4 +30,5 @@ struct WideButton: View {
 
 #Preview {
   WideButton(title: "Hello", action: {})
+  WideButton(title: "Person", systemImage: "person", action: {})
 }

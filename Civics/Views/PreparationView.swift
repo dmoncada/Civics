@@ -33,9 +33,10 @@ struct PreparationView: View {
           .contentMargins(.horizontal, sideInset)
           .scrollTargetBehavior(.viewAligned)
           .onScrollTargetVisibilityChange(idType: Int.self) { ids in
-            if let id = ids.first {
-              currentIndex = id
-            }
+            if let id = ids.first { currentIndex = id }
+          }
+          .sensoryFeedback(trigger: currentIndex) { old, new in
+            return abs(new - old) == 1 ? .selection : nil
           }
 
           HStack(spacing: 4) {

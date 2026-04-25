@@ -51,7 +51,7 @@ struct IconButton: View {
 
     } label: {
       Image(systemName: systemImage)
-        .font(.system(size: 24))
+        // .font(.system(size: 24))
         .frame(width: size, height: size)
         .alignmentGuide(HorizontalAlignment.center) { d in d.width / 2 - offset.x }
         .alignmentGuide(VerticalAlignment.center) { d in d.height / 2 + offset.y }

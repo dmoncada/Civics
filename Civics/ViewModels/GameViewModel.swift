@@ -21,6 +21,7 @@ class GameViewModel {
   var count: Int { questions.count }
   var isPassing: Bool { correctCount >= Self.minPassingCount }
   var isFailing: Bool { incorrectCount > Self.maxQuestionsCount - Self.minPassingCount }
+  var isFinished: Bool { responses.count >= Self.maxQuestionsCount }
 
   init() {
     guard let data = try? CivicsDataLoader.load() else { fatalError() }

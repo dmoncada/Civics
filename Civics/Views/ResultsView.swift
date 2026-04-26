@@ -5,6 +5,7 @@ struct ResultsView: View {
   @Environment(GameViewModel.self) private var vm
 
   @State private var confetti = 0
+  @State private var expanded = Set<Int>()
 
   var onCompleted: () -> Void = {}
 
@@ -15,27 +16,46 @@ struct ResultsView: View {
         .confettiCannon(trigger: $confetti, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 180), radius: 200, repetitions: 3, repetitionInterval: 0.25)
 
       ScrollView(.vertical) {
-        VStack(spacing: 16) {
+        LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
           ForEach(vm.responses, id: \.index) { item in
             let (id, correct) = item
             let question = vm.question(id: id)
             let answers = vm.answers(for: id)
 
-            DisclosureGroup {
+            // TODO: expanded question blends with answers; fix.
+            Section(isExpanded: isExpanded(id)) {
               VStack(alignment: .leading, spacing: 8) {
                 ForEach(answers, id: \.self) { answer in
                   AnswerRow(answer: answer, font: .system(size: 16))
                 }
               }
+              .padding(.vertical, 8)
 
-            } label: {
-              Text(question.replaceEmphasized(with: .underline))
-                .font(.title3)
-                .multilineTextAlignment(.leading)
-                .foregroundColor(correct ? .primary : .secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            } header: {
+              HStack(alignment: .firstTextBaseline) {
+                Text(question.replaceEmphasized(with: .underline))
+                  .font(.title3)
+                  .multilineTextAlignment(.leading)
+                  .foregroundColor(correct ? .primary : .secondary)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                  .rotationEffect(.degrees(expanded.contains(id) ? 90 : 0))
+                  .animation(.easeInOut(duration: 0.25), value: expanded.contains(id))
+                  .foregroundColor(.secondary)
+              }
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .contentShape(Rectangle())
+              .padding(.vertical, 8)
+              .onTapGesture {
+                withAnimation {
+                  if expanded.remove(id) == nil {
+                    expanded.insert(id)
+                  }
+                }
+              }
             }
-            .disclosureGroupStyle(.custom)
           }
         }
         .padding()
@@ -74,6 +94,19 @@ struct ResultsView: View {
     }
 
     return "Unreachable"
+  }
+
+  private func isExpanded(_ id: Int) -> Binding<Bool> {
+    Binding(
+      get: { expanded.contains(id) },
+      set: { new in
+        if new {
+          expanded.insert(id)
+        } else {
+          expanded.remove(id)
+        }
+      }
+    )
   }
 }
 

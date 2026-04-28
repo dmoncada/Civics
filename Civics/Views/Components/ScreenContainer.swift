@@ -9,7 +9,7 @@ struct ScreenContainer<Content: View>: View {
 
   var body: some View {
     ZStack {
-      Constants.backgroundGradient.ignoresSafeArea()
+      Color.background.ignoresSafeArea()
 
       content.padding()
     }

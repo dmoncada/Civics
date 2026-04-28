@@ -14,15 +14,14 @@ struct ResultsView: View {
       Text("You got ^[\(vm.correctCount) question](inflect: true) \(getIcon(vm.correctCount))")
         .font(.title2.bold())
         .confettiCannon(trigger: $confetti, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 180), radius: 200, repetitions: 3, repetitionInterval: 0.25)
+        .zIndex(1)
 
       ScrollView(.vertical) {
         LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
           ForEach(vm.responses, id: \.index) { item in
-            let (id, correct) = item
-            let question = vm.question(id: id)
+            let (id, _) = item
             let answers = vm.answers(for: id)
 
-            // TODO: expanded question blends with answers; fix.
             Section(isExpanded: isExpanded(id)) {
               VStack(alignment: .leading, spacing: 8) {
                 ForEach(answers, id: \.self) { answer in
@@ -32,33 +31,11 @@ struct ResultsView: View {
               .padding(.vertical, 8)
 
             } header: {
-              HStack(alignment: .firstTextBaseline) {
-                Text(question.replaceEmphasized(with: .underline))
-                  .font(.title3)
-                  .multilineTextAlignment(.leading)
-                  .foregroundColor(correct ? .primary : .secondary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                  .rotationEffect(.degrees(expanded.contains(id) ? 90 : 0))
-                  .animation(.easeInOut(duration: 0.25), value: expanded.contains(id))
-                  .foregroundColor(.secondary)
-              }
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .contentShape(Rectangle())
-              .padding(.vertical, 8)
-              .onTapGesture {
-                withAnimation {
-                  if expanded.remove(id) == nil {
-                    expanded.insert(id)
-                  }
-                }
-              }
+              headerView(for: item)
             }
           }
         }
-        .padding()
+        .padding(.horizontal, 8)
       }
       .scrollBounceBehavior(.basedOnSize)
 
@@ -107,6 +84,38 @@ struct ResultsView: View {
         }
       }
     )
+  }
+
+  @ViewBuilder
+  private func headerView(for item: (Int, Bool)) -> some View {
+    let (id, correct) = item
+    let question = vm.question(id: id)
+    let isExpanded = expanded.contains(id)
+
+    HStack(alignment: .firstTextBaseline) {
+      Text(question.replaceEmphasized(with: .underline))
+        .font(.title3)
+        .multilineTextAlignment(.leading)
+        .foregroundColor(correct ? .primary : .secondary)
+
+      Spacer()
+
+      Image(systemName: "chevron.right")
+        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .foregroundColor(.secondary)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(.vertical, 8)
+    .background(Color.background)
+    .contentShape(Rectangle())
+    .onTapGesture {
+      withAnimation {
+        if expanded.remove(id) == nil {
+          expanded.insert(id)
+        }
+      }
+    }
   }
 }
 

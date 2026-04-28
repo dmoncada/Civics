@@ -32,50 +32,30 @@ struct ResultsView: View {
               .padding(.vertical, 8)
 
             } header: {
-              HStack(alignment: .firstTextBaseline) {
-                Text(question.replaceEmphasized(with: .underline))
-                  .font(.title3)
-                  .multilineTextAlignment(.leading)
-                  .foregroundColor(correct ? .primary : .secondary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                  .rotationEffect(.degrees(expanded.contains(id) ? 90 : 0))
-                  .animation(.easeInOut(duration: 0.25), value: expanded.contains(id))
-                  .foregroundColor(.secondary)
-              }
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .contentShape(Rectangle())
-              .padding(.vertical, 8)
-              .onTapGesture {
-                withAnimation {
-                  if expanded.remove(id) == nil {
-                    expanded.insert(id)
-                  }
-                }
-              }
+              headerView(for: item)
             }
+            .border(.blue)
           }
         }
         .padding()
       }
       .scrollBounceBehavior(.basedOnSize)
+      .border(.red)
 
       WideButton(title: "Restart") {
         onCompleted()
       }
       .bold()
     }
-    .onAppear {
-      if vm.isPassing {
-        play(clip: "ta_da_brass")
-        confetti += 1
-
-      } else {
-        play(clip: "marimba_shake")
-      }
-    }
+    //    .onAppear {
+    //      if vm.isPassing {
+    //        play(clip: "ta_da_brass")
+    //        confetti += 1
+    //
+    //      } else {
+    //        play(clip: "marimba_shake")
+    //      }
+    //    }
   }
 
   private func getIcon(_ count: Int) -> String {
@@ -108,10 +88,47 @@ struct ResultsView: View {
       }
     )
   }
+
+  @ViewBuilder
+  private func headerView(for item: (Int, Bool)) -> some View {
+    let (id, correct) = item
+    let question = vm.question(id: id)
+    let isExpanded = expanded.contains(id)
+
+    HStack(alignment: .firstTextBaseline) {
+      Text(question.replaceEmphasized(with: .underline))
+        .font(.title3)
+        .multilineTextAlignment(.leading)
+        .foregroundColor(correct ? .primary : .secondary)
+
+      Spacer()
+
+      Image(systemName: "chevron.right")
+        .rotationEffect(.degrees(isExpanded ? 90 : 0))
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
+        .foregroundColor(.secondary)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .contentShape(Rectangle())
+    .padding(.vertical, 8)
+    .onTapGesture {
+      withAnimation {
+        if expanded.remove(id) == nil {
+          expanded.insert(id)
+        }
+      }
+    }
+  }
 }
 
 #Preview {
   let vm = GameViewModel()
+  vm.respond(true)
+  vm.respond(true)
+  vm.respond(false)
+  vm.respond(true)
+  vm.respond(true)
+  vm.respond(false)
   vm.respond(true)
   vm.respond(true)
   vm.respond(false)

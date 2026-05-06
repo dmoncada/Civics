@@ -1,10 +1,12 @@
 # Civics
 
+[![CI](https://github.com/dmoncada/Civics/actions/workflows/ci.yml/badge.svg)](https://github.com/dmoncada/Civics/actions/workflows/ci.yml)
+
 A fun little app to help you prepare for your [Civics Test][1]! 🇺🇸🇺🇸
 
 ![Screenshot](assets/screenshot.png)
 
-## Gameplay
+## How to Play
 
 - Tap on **Prep** to study all questions and their answers. 🤓📚
 - Tap on **Test** to play! Ask your buddy to play the interviewer and to ask questions out loud.

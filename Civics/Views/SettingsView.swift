@@ -1,10 +1,17 @@
 import SwiftUI
 
 struct SettingsView: View {
-  @Environment(\.dismiss) private var dismiss
+  @Environment(Router.self) private var router
+  @Environment(GameViewModel.self) private var vm
 
-  @Binding var selectedState: UnionState
-  @Binding var selectedDuration: Int
+  @AppStorage(AppStorageKey.unionState.rawValue)
+  private var state: UnionState = .wa
+
+  @AppStorage(AppStorageKey.duration.rawValue)
+  private var duration = 30
+
+  @State var selectedState: UnionState = .wa
+  @State var selectedDuration: Int = 30
 
   var body: some View {
     NavigationStack {
@@ -16,34 +23,40 @@ struct SettingsView: View {
           Text("Test Settings")
         }
       }
-      .navigationTitle("Settings")
       #if !os(macOS)
+      .navigationTitle("Settings")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button("Done") {
-            dismiss()
+            router.hideSheet()
           }
         }
       }
       #endif
+    }
+    .onAppear {
+      selectedDuration = duration
+    }
+    .onChange(of: selectedDuration, initial: false) {
+      duration = selectedDuration
+    }
+    .task(id: state) {
+      try? await vm.setState(state)
     }
   }
 }
 
 #Preview {
   @Previewable @State var showSheet = false
-  @Previewable @State var state: UnionState = .wa
-  @Previewable @State var duration = 120
 
   Button("Show Sheet") {
     showSheet = true
   }
   .sheet(isPresented: $showSheet) {
-    SettingsView(
-      selectedState: $state,
-      selectedDuration: $duration
-    )
-    .presentationDetents([.fraction(1 / 3)])
+    SettingsView()
+      .presentationDetents([.fraction(1 / 3)])
   }
+  .environment(Router())
+  .environment(GameViewModel())
 }

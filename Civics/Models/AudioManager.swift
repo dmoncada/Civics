@@ -50,11 +50,10 @@ class AudioManager {
   }
 
   func play(clip: String) {
-    if let player = players[clip] {
-      player.stop()
-      player.currentTime = 0
-      player.play()
-    }
+    guard let player = players[clip] else { return }
+    player.stop()
+    player.currentTime = 0
+    player.play()
   }
 }
 

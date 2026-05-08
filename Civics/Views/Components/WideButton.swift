@@ -5,7 +5,11 @@ struct WideButton: View {
   let action: () -> Void
   let systemImage: String?
 
-  init(title: String, systemImage: String? = nil, action: @escaping () -> Void = {}) {
+  init(
+    title: String,
+    systemImage: String? = nil,
+    action: @escaping () -> Void = {}
+  ) {
     self.title = title
     self.action = action
     self.systemImage = systemImage

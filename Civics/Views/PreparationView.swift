@@ -36,7 +36,7 @@ struct PreparationView: View {
             if let id = ids.first { currentIndex = id }
           }
           .sensoryFeedback(trigger: currentIndex) { old, new in
-            return abs(new - old) == 1 ? .selection : nil
+            abs(new - old) == 1 ? .selection : nil
           }
 
           HStack(spacing: 4) {

@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class GameViewModel {
+final class GameViewModel {
   static let maxQuestionsCount = 20
   static let minPassingCount = 12
 

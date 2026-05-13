@@ -37,9 +37,10 @@ class CongressService {
     return try response.members.filter(\.isSenator).map { member in
       Senator(
         id: member.bioguideId,
-        party: member.partyName,
+        party: Party(rawValue: member.partyName)!,
         state: try UnionState(validating: member.state),
-        nameComponents: try getComponents(from: member.name)
+        nameComponents: try getComponents(from: member.name),
+        imageUrl: member.depiction.imageUrl
       )
     }
   }
@@ -50,10 +51,11 @@ class CongressService {
     return try response.members.filter(\.isRepresentative).map { member in
       Representative(
         id: member.bioguideId,
-        party: member.partyName,
+        party: Party(rawValue: member.partyName)!,
         state: try UnionState(validating: member.state),
         district: member.district,
-        nameComponents: try getComponents(from: member.name)
+        nameComponents: try getComponents(from: member.name),
+        imageUrl: member.depiction.imageUrl
       )
     }
   }

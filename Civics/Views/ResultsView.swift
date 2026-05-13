@@ -96,14 +96,14 @@ struct ResultsView: View {
       Text(question.replaceEmphasized(with: .underline))
         .font(.title3)
         .multilineTextAlignment(.leading)
-        .foregroundColor(correct ? .primary : .secondary)
+        .foregroundStyle(correct ? .primary : .secondary)
 
       Spacer()
 
       Image(systemName: "chevron.right")
         .rotationEffect(.degrees(isExpanded ? 90 : 0))
         .animation(.easeInOut(duration: 0.25), value: isExpanded)
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.vertical, 8)

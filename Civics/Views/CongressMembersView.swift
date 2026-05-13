@@ -17,20 +17,38 @@ struct CongressMembersView: View {
         List {
           Section("Senators") {
             ForEach(vm.senators) { member in
-              Text(member.mediumName)
+              HStack {
+                Avatar(imageUrl: member.imageUrl, initials: member.initials)
+
+                VStack(alignment: .leading) {
+                  Text(member.mediumName)
+
+                  Text(member.party.rawValue)
+                    .font(.caption.weight(.light))
+                    .foregroundStyle(member.party.style)
+                }
+              }
             }
           }
 
           Section("Representatives") {
             ForEach(vm.representatives) { member in
               HStack {
-                Text(member.mediumName)
-                  .frame(alignment: .leading)
+                Avatar(imageUrl: member.imageUrl, initials: member.initials)
+
+                VStack(alignment: .leading) {
+                  Text(member.mediumName)
+
+                  Text(member.party.rawValue)
+                    .font(.caption.weight(.light))
+                    .foregroundStyle(member.party.style)
+                }
 
                 if let district = member.district {
                   Spacer()
                   Text("District \(district)")
-                    .frame(alignment: .trailing)
+
+                    .font(.subheadline.weight(.light))
                 }
               }
             }
@@ -40,6 +58,19 @@ struct CongressMembersView: View {
     }
     .task(id: state) {
       await vm.load(state: state)
+    }
+  }
+}
+
+extension Party {
+  var style: some ShapeStyle {
+    switch self {
+    case .democratic:
+      return .blue
+    case .republican:
+      return .red
+    case .independent:
+      return .green
     }
   }
 }

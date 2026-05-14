@@ -22,10 +22,17 @@ struct CongressMembersView: View {
 
                 VStack(alignment: .leading) {
                   Text(member.mediumName)
+                    .bold()
 
                   Text(member.party.rawValue)
-                    .font(.caption.weight(.light))
+                    .font(.caption.bold())
                     .foregroundStyle(member.party.style)
+                }
+
+                Spacer()
+
+                if let websiteUrl = member.websiteUrl, let url = URL(string: websiteUrl) {
+                  websiteLink(url)
                 }
               }
             }
@@ -38,17 +45,25 @@ struct CongressMembersView: View {
 
                 VStack(alignment: .leading) {
                   Text(member.mediumName)
+                    .bold()
 
-                  Text(member.party.rawValue)
-                    .font(.caption.weight(.light))
-                    .foregroundStyle(member.party.style)
+                  HStack(spacing: 4) {
+                    Text(member.party.rawValue)
+                      .font(.caption.bold())
+                      .foregroundStyle(member.party.style)
+
+                    if let district = member.district {
+                      Text("·")
+                      Text("District \(Text(String(district)).bold())")
+                        .font(.caption.weight(.light))
+                    }
+                  }
                 }
 
-                if let district = member.district {
-                  Spacer()
-                  Text("District \(district)")
+                Spacer()
 
-                    .font(.subheadline.weight(.light))
+                if let websiteUrl = member.websiteUrl, let url = URL(string: websiteUrl) {
+                  websiteLink(url)
                 }
               }
             }
@@ -57,8 +72,17 @@ struct CongressMembersView: View {
       }
     }
     .task(id: state) {
-      await vm.load(state: state)
+      try? await vm.load(state: state)
     }
+  }
+
+  private func websiteLink(_ url: URL) -> some View {
+    Link(destination: url) {
+      Image(systemName: "arrow.up.right.square")
+        .foregroundStyle(Color.accentColor)
+        .padding(4)
+    }
+    .buttonStyle(.plain)
   }
 }
 
@@ -67,10 +91,10 @@ extension Party {
     switch self {
     case .democratic:
       return .blue
+    case .independent, .libertarian:
+      return .green
     case .republican:
       return .red
-    case .independent:
-      return .green
     }
   }
 }

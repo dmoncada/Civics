@@ -12,7 +12,11 @@ struct CongressApi {
     return apiKey
   }()
 
-  static func buildMembersUrl(for state: UnionState, limit: Int = 250, current: Bool = true) throws -> URL {
+  static func buildMembersUrl(
+    for state: UnionState,
+    limit: Int = 250,
+    current: Bool = true
+  ) throws -> URL {
     guard var components = URLComponents(string: baseUrl) else { throw URLError(.badURL) }
 
     components.path = "/v3/member/\(state.code)"
@@ -20,6 +24,19 @@ struct CongressApi {
       URLQueryItem(name: "format", value: "json"),
       URLQueryItem(name: "limit", value: limit.description),
       URLQueryItem(name: "currentMember", value: current.description),
+      URLQueryItem(name: "api_key", value: apiKey),
+    ]
+
+    guard let url = components.url else { throw URLError(.badURL) }
+    return url
+  }
+
+  static func buildMemberDetailUrl(for id: String) throws -> URL {
+    guard var components = URLComponents(string: baseUrl) else { throw URLError(.badURL) }
+
+    components.path = "/v3/member/\(id)"
+    components.queryItems = [
+      URLQueryItem(name: "format", value: "json"),
       URLQueryItem(name: "api_key", value: apiKey),
     ]
 
@@ -95,6 +112,13 @@ class CongressService {
       cache[state] = nil
       throw error
     }
+  }
+
+  func fetchMemberDetail(for id: String) async throws -> CongressMemberDetailResponse {
+    let url = try CongressApi.buildMemberDetailUrl(for: id)
+    let (data, _) = try await URLSession.shared.data(from: url)
+    let response = try JSONDecoder().decode(CongressMemberDetailResponse.self, from: data)
+    return response
   }
 
   private var cache = [UnionState: CacheEntry]()

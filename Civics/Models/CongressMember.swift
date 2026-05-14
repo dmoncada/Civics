@@ -2,8 +2,9 @@ import Foundation
 
 enum Party: String {
   case democratic = "Democratic"
-  case republican = "Republican"
   case independent = "Independent"
+  case libertarian = "Libertarian"
+  case republican = "Republican"
 }
 
 struct CongressResponse: Decodable {
@@ -42,12 +43,25 @@ struct CongressMember: Decodable {
   }
 }
 
+struct CongressMemberDetailResponse: Decodable {
+  let detail: CongressMemberDetail
+
+  enum CodingKeys: String, CodingKey {
+    case detail = "member"
+  }
+}
+
+struct CongressMemberDetail: Decodable {
+  let officialWebsiteUrl: String
+}
+
 struct Senator: Identifiable {
   let id: String
   let party: Party
   let state: UnionState
   let nameComponents: PersonNameComponents
   let imageUrl: String
+  var websiteUrl: String?
 }
 
 struct Representative: Identifiable {
@@ -57,6 +71,7 @@ struct Representative: Identifiable {
   let district: Int?
   let nameComponents: PersonNameComponents
   let imageUrl: String
+  var websiteUrl: String?
 }
 
 extension Senator: NameFormattable {}

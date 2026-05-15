@@ -10,6 +10,8 @@ struct PreparationView: View {
   private let cardHeight: CGFloat = 400
   private let cardMaxWidth: CGFloat = 200
 
+  private let synthesizer = SpeechSynthesizer()
+
   var body: some View {
     VStack(spacing: 16) {
       GeometryReader { reader in
@@ -90,7 +92,6 @@ extension PreparationView {
       VStack {
         Text("Question #\(id + 1)")
           .font(.caption)
-          .padding(.top, 8)
 
         Spacer()
 
@@ -100,6 +101,11 @@ extension PreparationView {
           .font(.title3.bold())
 
         Spacer()
+
+        HStack {
+          speakerButton(question)
+          FavoriteButton(isSet: vm.favoriteBinding(for: id))
+        }
       }
       .padding()
     }
@@ -140,6 +146,17 @@ extension PreparationView {
           .fill(.white.opacity(0.5))
       )
       .padding(8)
+  }
+
+  @ViewBuilder
+  fileprivate func speakerButton(_ text: String) -> some View {
+    Button {
+      Task {
+        await synthesizer.speak(text: text, langCode: "en-US")
+      }
+    } label: {
+      Image(systemName: "speaker.wave.2")
+    }
   }
 }
 

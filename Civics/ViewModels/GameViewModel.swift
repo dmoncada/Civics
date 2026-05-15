@@ -18,6 +18,12 @@ final class GameViewModel {
   private var questionIndices: [Int] = []
   private var currentIndex = 0
 
+  private let favoritesKey = "favorite_ids"
+
+  private(set) var favorites: Set<Int> = [] {
+    didSet { saveFavorites() }
+  }
+
   var count: Int { questions.count }
   var isPassing: Bool { correctCount >= Self.minPassingCount }
   var isFailing: Bool { incorrectCount > Self.maxQuestionsCount - Self.minPassingCount }
@@ -27,7 +33,28 @@ final class GameViewModel {
     guard let data = try? CivicsDataLoader.load() else { fatalError() }
     questions = data.sorted { $0.id < $1.id }
     questionIndices = Array(0 ..< questions.count)
+    loadFavorites()
     reset()
+  }
+
+  func isFavorite(_ id: Int) -> Bool {
+    favorites.contains(id)
+  }
+
+  func toggleFavorite(_ id: Int) {
+    if favorites.remove(id) == nil {
+      favorites.insert(id)
+    }
+  }
+
+  private func saveFavorites() {
+    let ids = Array(favorites)
+    UserDefaults.standard.set(ids, forKey: favoritesKey)
+  }
+
+  private func loadFavorites() {
+    let ids = UserDefaults.standard.array(forKey: favoritesKey) as? [Int] ?? []
+    favorites = Set(ids)
   }
 
   func reset() {
@@ -44,22 +71,22 @@ final class GameViewModel {
 
     let service = CongressService.shared
     let members = try await service.fetchMembers(for: state)
-    
+
     senators =
       members
       .filter { $0.type == .senator }
-.sorted {
-      ($0.nameComponents.familyName ?? "")
-        < ($1.nameComponents.familyName ?? "")
-    }
+      .sorted {
+        ($0.nameComponents.familyName ?? "")
+          < ($1.nameComponents.familyName ?? "")
+      }
 
     representatives =
       members
       .filter { $0.type == .representative }
-.sorted {
-      ($0.district ?? 0)
-        < ($1.district ?? 0)
-    }
+      .sorted {
+        ($0.district ?? 0)
+          < ($1.district ?? 0)
+      }
 
     unionState = state
   }
@@ -121,4 +148,21 @@ final class GameViewModel {
   }
 
   private var questionIndex: Int { questionIndices[currentIndex] }
+}
+
+extension GameViewModel {
+  func favoriteBinding(for id: Int) -> Binding<Bool> {
+    Binding(
+      get: { self.isFavorite(id) },
+      set: { newValue in
+        if newValue {
+          self.favorites.insert(id)
+        } else {
+          self.favorites.remove(id)
+        }
+
+        self.saveFavorites()
+      }
+    )
+  }
 }

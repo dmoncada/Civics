@@ -52,7 +52,15 @@ struct CongressMemberDetailResponse: Decodable {
 }
 
 struct CongressMemberDetail: Decodable {
+  let addressInformation: AddressInformation
   let officialWebsiteUrl: String
+}
+
+struct AddressInformation: Codable {
+  let city: String
+  let officeAddress: String
+  let phoneNumber: String
+  let zipCode: Int
 }
 
 struct Senator: Identifiable {
@@ -61,7 +69,7 @@ struct Senator: Identifiable {
   let state: UnionState
   let nameComponents: PersonNameComponents
   let imageUrl: String
-  var websiteUrl: String?
+  var detail: CongressMemberDetail?
 }
 
 struct Representative: Identifiable {
@@ -71,7 +79,7 @@ struct Representative: Identifiable {
   let district: Int?
   let nameComponents: PersonNameComponents
   let imageUrl: String
-  var websiteUrl: String?
+  var detail: CongressMemberDetail?
 }
 
 extension Senator: NameFormattable {}

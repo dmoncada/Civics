@@ -31,8 +31,15 @@ struct CongressMembersView: View {
 
                 Spacer()
 
-                if let websiteUrl = member.websiteUrl, let url = URL(string: websiteUrl) {
-                  websiteLink(url)
+                HStack(spacing: 0) {
+                  let rawPhone = member.detail?.addressInformation.phoneNumber
+                  if let phone = extractPhone(rawPhone), let url = URL(string: "tel://" + phone) {
+                    link(url, icon: "phone")
+                  }
+
+                  if let websiteUrl = member.detail?.officialWebsiteUrl, let url = URL(string: websiteUrl) {
+                    link(url, icon: "arrow.up.right.square")
+                  }
                 }
               }
             }
@@ -62,8 +69,15 @@ struct CongressMembersView: View {
 
                 Spacer()
 
-                if let websiteUrl = member.websiteUrl, let url = URL(string: websiteUrl) {
-                  websiteLink(url)
+                HStack(spacing: 0) {
+                  let rawPhone = member.detail?.addressInformation.phoneNumber
+                  if let phone = extractPhone(rawPhone), let url = URL(string: "tel://\(phone)") {
+                    link(url, icon: "phone")
+                  }
+
+                  if let websiteUrl = member.detail?.officialWebsiteUrl, let url = URL(string: websiteUrl) {
+                    link(url, icon: "arrow.up.right.square")
+                  }
                 }
               }
             }
@@ -76,14 +90,21 @@ struct CongressMembersView: View {
     }
   }
 
-  private func websiteLink(_ url: URL) -> some View {
+  private func link(_ url: URL, icon: String) -> some View {
     Link(destination: url) {
-      Image(systemName: "arrow.up.right.square")
+      Image(systemName: icon)
         .foregroundStyle(Color.accentColor)
         .padding(4)
     }
     .buttonStyle(.plain)
   }
+}
+
+private func extractPhone(_ input: String?) -> String? {
+  guard let input else { return nil }
+  let range = NSRange(location: 0, length: input.utf16.count)
+  let result = NSTextCheckingResult.phoneNumberCheckingResult(range: range, phoneNumber: input)
+  return result.phoneNumber?.filter { $0.isNumber }
 }
 
 extension Party {

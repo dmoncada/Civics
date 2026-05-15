@@ -32,10 +32,10 @@ class CongressMembersViewModel {
     let details = try await loadDetails(ids: ids)
 
     for i in senators.indices {
-      senators[i].websiteUrl = details[senators[i].id]?.officialWebsiteUrl
+      senators[i].detail = details[senators[i].id]
     }
     for i in representatives.indices {
-      representatives[i].websiteUrl = details[representatives[i].id]?.officialWebsiteUrl
+      representatives[i].detail = details[representatives[i].id]
     }
   }
 

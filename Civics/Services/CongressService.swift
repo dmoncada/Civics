@@ -48,32 +48,88 @@ struct CongressApi {
 class CongressService {
   static let shared = CongressService()
 
-  func fetchSenators(for state: UnionState) async throws -> [Senator] {
-    let response = try await fetchResponse(for: state)
+  private let decoder = JSONDecoder()
 
-    return try response.members.filter(\.isSenator).map { member in
-      Senator(
-        id: member.bioguideId,
-        party: Party(rawValue: member.partyName)!,
-        state: try UnionState(validating: member.state),
-        nameComponents: try getComponents(from: member.name),
-        imageUrl: member.depiction.imageUrl
-      )
-    }
+  private var cache: [String: CacheEntry] = [:]
+
+  private enum CacheEntry {
+    case inProgress(Task<Data, Error>)
+    case ready(Data)
+  }
+
+  func fetchSenators(for state: UnionState) async throws -> [Senator] {
+    let url = try CongressApi.buildMembersUrl(for: state)
+    let response: CongressResponse = try await fetch(url)
+
+    return try response.members
+      .filter(\.isSenator)
+      .map { member in
+        Senator(
+          id: member.bioguideId,
+          party: Party(rawValue: member.partyName)!,
+          state: try UnionState(validating: member.state),
+          nameComponents: try getComponents(from: member.name),
+          imageUrl: member.depiction.imageUrl
+        )
+      }
   }
 
   func fetchRepresentatives(for state: UnionState) async throws -> [Representative] {
-    let response = try await fetchResponse(for: state)
+    let url = try CongressApi.buildMembersUrl(for: state)
+    let response: CongressResponse = try await fetch(url)
 
-    return try response.members.filter(\.isRepresentative).map { member in
-      Representative(
-        id: member.bioguideId,
-        party: Party(rawValue: member.partyName)!,
-        state: try UnionState(validating: member.state),
-        district: member.district,
-        nameComponents: try getComponents(from: member.name),
-        imageUrl: member.depiction.imageUrl
-      )
+    return try response.members
+      .filter(\.isRepresentative)
+      .map { member in
+        Representative(
+          id: member.bioguideId,
+          party: Party(rawValue: member.partyName)!,
+          state: try UnionState(validating: member.state),
+          district: member.district,
+          nameComponents: try getComponents(from: member.name),
+          imageUrl: member.depiction.imageUrl
+        )
+      }
+  }
+
+  func fetchMemberDetail(for id: String) async throws -> CongressMemberDetailResponse {
+    let url = try CongressApi.buildMemberDetailUrl(for: id)
+    return try await fetch(url)
+  }
+
+  private func fetch<T: Decodable>(_ url: URL) async throws -> T {
+    let data = try await fetchData(for: url)
+    return try decoder.decode(T.self, from: data)
+  }
+
+  private func fetchData(for url: URL) async throws -> Data {
+    let key = url.absoluteString
+
+    if let cached = cache[key] {
+      switch cached {
+      case .inProgress(let task):
+        return try await task.value
+
+      case .ready(let data):
+        return data
+      }
+    }
+
+    let task = Task<Data, Error> {
+      let (data, _) = try await URLSession.shared.data(from: url)
+      return data
+    }
+
+    cache[key] = .inProgress(task)
+
+    do {
+      let data = try await task.value
+      cache[key] = .ready(data)
+      return data
+
+    } catch {
+      cache[key] = nil
+      throw error
     }
   }
 
@@ -82,49 +138,5 @@ class CongressService {
     var components = try PersonNameComponents(name)
     components.nickname = nickname
     return components
-  }
-
-  private func fetchResponse(for state: UnionState) async throws -> CongressResponse {
-    if let cached = cache[state] {
-      switch cached {
-      case .inProgress(let task):
-        return try await task.value
-      case .ready(let response):
-        return response
-      }
-    }
-
-    let task = Task {
-      let url = try CongressApi.buildMembersUrl(for: state)
-      let (data, _) = try await URLSession.shared.data(from: url)
-      let response = try JSONDecoder().decode(CongressResponse.self, from: data)
-      return response
-    }
-
-    cache[state] = .inProgress(task)
-
-    do {
-      let response = try await task.value
-      cache[state] = .ready(response)
-      return response
-
-    } catch {
-      cache[state] = nil
-      throw error
-    }
-  }
-
-  func fetchMemberDetail(for id: String) async throws -> CongressMemberDetailResponse {
-    let url = try CongressApi.buildMemberDetailUrl(for: id)
-    let (data, _) = try await URLSession.shared.data(from: url)
-    let response = try JSONDecoder().decode(CongressMemberDetailResponse.self, from: data)
-    return response
-  }
-
-  private var cache = [UnionState: CacheEntry]()
-
-  private enum CacheEntry {
-    case inProgress(Task<CongressResponse, Error>)
-    case ready(CongressResponse)
   }
 }

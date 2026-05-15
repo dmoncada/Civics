@@ -5,13 +5,22 @@ enum Party: String {
   case independent = "Independent"
   case libertarian = "Libertarian"
   case republican = "Republican"
+
+  var name: String {
+    self.rawValue.capitalized
+  }
+}
+
+enum MemberType {
+  case senator
+  case representative
 }
 
 struct CongressResponse: Decodable {
-  let members: [CongressMember]
+  let members: [CongressMemberDto]
 }
 
-struct CongressMember: Decodable {
+struct CongressMemberDto: Decodable {
   let bioguideId: String
   let depiction: Depiction
   let name: String
@@ -63,17 +72,9 @@ struct AddressInformation: Codable {
   let zipCode: Int
 }
 
-struct Senator: Identifiable {
+struct CongressMember: Identifiable {
   let id: String
-  let party: Party
-  let state: UnionState
-  let nameComponents: PersonNameComponents
-  let imageUrl: String
-  var detail: CongressMemberDetail?
-}
-
-struct Representative: Identifiable {
-  let id: String
+  let type: MemberType
   let party: Party
   let state: UnionState
   let district: Int?
@@ -82,5 +83,4 @@ struct Representative: Identifiable {
   var detail: CongressMemberDetail?
 }
 
-extension Senator: NameFormattable {}
-extension Representative: NameFormattable {}
+extension CongressMember: NameFormattable {}

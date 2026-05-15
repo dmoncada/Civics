@@ -3,8 +3,8 @@ import SwiftUI
 @MainActor
 @Observable
 class CongressMembersViewModel {
-  var senators: [Senator] = []
-  var representatives: [Representative] = []
+  var senators: [CongressMember] = []
+  var representatives: [CongressMember] = []
   var isLoading = false
 
   func load(state: UnionState) async throws {
@@ -12,31 +12,30 @@ class CongressMembersViewModel {
     isLoading = true
 
     let service = CongressService.shared
-    async let task1 = service.fetchSenators(for: state)
-    async let task2 = service.fetchRepresentatives(for: state)
+    var members = try await service.fetchMembers(for: state)
 
-    senators = try await task1.sorted {
-      ($0.nameComponents.familyName ?? "")
-        < ($1.nameComponents.familyName ?? "")
-    }
-
-    representatives = try await task2.sorted {
-      ($0.district ?? 0)
-        < ($1.district ?? 0)
-    }
-
-    var ids: [String] = []
-    ids.append(contentsOf: senators.map(\.id))
-    ids.append(contentsOf: representatives.map(\.id))
-
+    let ids = members.map { $0.id }
     let details = try await loadDetails(ids: ids)
 
-    for i in senators.indices {
-      senators[i].detail = details[senators[i].id]
+    for index in members.indices {
+      members[index].detail = details[members[index].id]
     }
-    for i in representatives.indices {
-      representatives[i].detail = details[representatives[i].id]
-    }
+
+    senators =
+      members
+      .filter { $0.type == .senator }
+      .sorted {
+        ($0.nameComponents.familyName ?? "")
+          < ($1.nameComponents.familyName ?? "")
+      }
+
+    representatives =
+      members
+      .filter { $0.type == .representative }
+      .sorted {
+        ($0.district ?? 0)
+          < ($1.district ?? 0)
+      }
   }
 
   private func loadDetails(

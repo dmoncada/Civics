@@ -1,51 +1,7 @@
 import Foundation
 
-// See: https://github.com/LibraryOfCongress/api.congress.gov
-struct CongressApi {
-  static let baseUrl = "https://api.congress.gov"
-
-  static let apiKey: String = {
-    guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else {
-      print("API_KEY not found in Info.plist")
-      return ""
-    }
-    return apiKey
-  }()
-
-  static func buildMembersUrl(
-    for state: UnionState,
-    limit: Int = 250,
-    current: Bool = true
-  ) throws -> URL {
-    guard var components = URLComponents(string: baseUrl) else { throw URLError(.badURL) }
-
-    components.path = "/v3/member/\(state.code)"
-    components.queryItems = [
-      URLQueryItem(name: "format", value: "json"),
-      URLQueryItem(name: "limit", value: limit.description),
-      URLQueryItem(name: "currentMember", value: current.description),
-      URLQueryItem(name: "api_key", value: apiKey),
-    ]
-
-    guard let url = components.url else { throw URLError(.badURL) }
-    return url
-  }
-
-  static func buildMemberDetailUrl(for id: String) throws -> URL {
-    guard var components = URLComponents(string: baseUrl) else { throw URLError(.badURL) }
-
-    components.path = "/v3/member/\(id)"
-    components.queryItems = [
-      URLQueryItem(name: "format", value: "json"),
-      URLQueryItem(name: "api_key", value: apiKey),
-    ]
-
-    guard let url = components.url else { throw URLError(.badURL) }
-    return url
-  }
-}
-
-class CongressService {
+@MainActor
+final class CongressService {
   static let shared = CongressService()
 
   private let decoder = JSONDecoder()
@@ -57,33 +13,16 @@ class CongressService {
     case ready(Data)
   }
 
-  func fetchSenators(for state: UnionState) async throws -> [Senator] {
+  func fetchMembers(for state: UnionState) async throws -> [CongressMember] {
     let url = try CongressApi.buildMembersUrl(for: state)
     let response: CongressResponse = try await fetch(url)
 
     return try response.members
-      .filter(\.isSenator)
       .map { member in
-        Senator(
+        CongressMember(
           id: member.bioguideId,
-          party: Party(rawValue: member.partyName)!,
-          state: try UnionState(validating: member.state),
-          nameComponents: try getComponents(from: member.name),
-          imageUrl: member.depiction.imageUrl
-        )
-      }
-  }
-
-  func fetchRepresentatives(for state: UnionState) async throws -> [Representative] {
-    let url = try CongressApi.buildMembersUrl(for: state)
-    let response: CongressResponse = try await fetch(url)
-
-    return try response.members
-      .filter(\.isRepresentative)
-      .map { member in
-        Representative(
-          id: member.bioguideId,
-          party: Party(rawValue: member.partyName)!,
+          type: member.isSenator ? .senator : .representative,
+          party: try Party(validating: member.partyName),
           state: try UnionState(validating: member.state),
           district: member.district,
           nameComponents: try getComponents(from: member.name),

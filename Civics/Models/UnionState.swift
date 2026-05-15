@@ -111,16 +111,3 @@ extension UnionState {
     }
   }
 }
-
-extension UnionState {
-  init(validating input: String) throws {
-    guard let state = UnionState(rawValue: input) else {
-      throw UnionStateError.invalidInput("Invalid input: \(input)")
-    }
-    self = state
-  }
-}
-
-enum UnionStateError: Error {
-  case invalidInput(String)
-}

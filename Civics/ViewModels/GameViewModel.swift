@@ -11,8 +11,8 @@ final class GameViewModel {
   private(set) var incorrectCount = 0
 
   private(set) var unionState: UnionState? = nil
-  private(set) var senators: [Senator] = []
-  private(set) var representatives: [Representative] = []
+  private(set) var senators: [CongressMember] = []
+  private(set) var representatives: [CongressMember] = []
 
   private var questions: [CivicsQuestion]
   private var questionIndices: [Int] = []
@@ -43,15 +43,20 @@ final class GameViewModel {
     if unionState == state { return }
 
     let service = CongressService.shared
-    async let task1 = service.fetchSenators(for: state)
-    async let task2 = service.fetchRepresentatives(for: state)
-
-    senators = try await task1.sorted {
+    let members = try await service.fetchMembers(for: state)
+    
+    senators =
+      members
+      .filter { $0.type == .senator }
+.sorted {
       ($0.nameComponents.familyName ?? "")
         < ($1.nameComponents.familyName ?? "")
     }
 
-    representatives = try await task2.sorted {
+    representatives =
+      members
+      .filter { $0.type == .representative }
+.sorted {
       ($0.district ?? 0)
         < ($1.district ?? 0)
     }

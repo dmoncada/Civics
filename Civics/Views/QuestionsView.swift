@@ -62,18 +62,18 @@ extension QuestionsView {
   fileprivate func responseButton(_ correct: Bool) -> some View {
     let title = correct ? "Correct" : "Incorrect"
     let tint = correct ? Color.correct : .incorrect
-    let clip = "marimba_\(correct ? "positive" : "negative")"
-
+    
     WideButton(title: title) {
       if vm.isFinished {
         return
       }
 
       vm.respond(correct)
-      play(clip: clip)
+try? play(correct ? .uiSfxTapCorrect : .uiSfxTapIncorrect)
 
       if vm.isFinished {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        Task {
+          try? await Task.sleep(for: .seconds(1))
           onComplete()
         }
       }

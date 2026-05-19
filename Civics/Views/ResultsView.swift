@@ -46,11 +46,11 @@ struct ResultsView: View {
     }
     .onAppear {
       if vm.isPassing {
-        play(clip: "ta_da_brass")
+        try? play(.uiSfxSuccess)
         confetti += 1
 
       } else {
-        play(clip: "marimba_shake")
+        try? play(.uiSfxFailure)
       }
     }
   }

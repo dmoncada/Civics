@@ -14,7 +14,7 @@ struct CountdownView: View {
       .scaledToFit()
       .task {
         for await i in countdown(from: 3) {
-          play(clip: "gentle_click")
+          try? play(.uiSfxTick)
           withAnimation {
             value = i
           }

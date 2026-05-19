@@ -6,7 +6,7 @@ struct ContentView: View {
       .onAppear {
         let audio = AudioManager.shared
         try? audio.configureSession()
-        try? audio.preloadClips()
+        try? audio.preloadSounds()
       }
   }
 }

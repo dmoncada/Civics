@@ -62,14 +62,14 @@ extension QuestionsView {
   fileprivate func responseButton(_ correct: Bool) -> some View {
     let title = correct ? "Correct" : "Incorrect"
     let tint = correct ? Color.correct : .incorrect
-    
+
     WideButton(title: title) {
       if vm.isFinished {
         return
       }
 
       vm.respond(correct)
-try? play(correct ? .uiSfxTapCorrect : .uiSfxTapIncorrect)
+      try? play(correct ? .uiSfxTapCorrect : .uiSfxTapIncorrect)
 
       if vm.isFinished {
         Task {

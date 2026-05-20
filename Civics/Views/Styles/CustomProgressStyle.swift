@@ -8,7 +8,7 @@ struct CustomProgressStyle: ProgressViewStyle {
       GeometryReader { geometry in
         ZStack(alignment: .leading) {
           RoundedRectangle(cornerRadius: 8)
-            .foregroundColor(.gray.opacity(0.25))
+            .foregroundStyle(.gray.opacity(0.25))
 
           RoundedRectangle(cornerRadius: 8)
             .fill(progressColor(for: fraction))
@@ -20,9 +20,9 @@ struct CustomProgressStyle: ProgressViewStyle {
       configuration.label
         .font(.caption)
         .monospacedDigit()
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     }
-    .cornerRadius(8)
+    .clipShape(.rect(cornerRadius: 8))
   }
 
   private func progressColor(for t: Double) -> Color {

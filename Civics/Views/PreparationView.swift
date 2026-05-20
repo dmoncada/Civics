@@ -21,13 +21,15 @@ struct PreparationView: View {
           ScrollView(.horizontal) {
             LazyHStack(spacing: 16) {
               ForEach(0 ..< vm.count, id: \.self) { i in
-                cardView(for: i, isFlipped: flippedCards.contains(i))
-                  .id(i)
-                  .onTapGesture {
-                    if flippedCards.remove(i) == nil {
-                      flippedCards.insert(i)
-                    }
+                Button {
+                  if flippedCards.remove(i) == nil {
+                    flippedCards.insert(i)
                   }
+                } label: {
+                  cardView(for: i, isFlipped: flippedCards.contains(i))
+                }
+                .buttonStyle(.plain)
+                .id(i)
               }
             }
             .scrollTargetLayout()

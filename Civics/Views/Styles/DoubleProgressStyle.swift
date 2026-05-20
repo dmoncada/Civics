@@ -13,7 +13,7 @@ struct DoubleProgressStyle: ProgressViewStyle {
 
         ZStack {
           RoundedRectangle(cornerRadius: 8)
-            .foregroundColor(.gray.opacity(0.25))
+            .foregroundStyle(.gray.opacity(0.25))
 
           let secondaryWidth = min(secondary * width, width)
 
@@ -40,7 +40,7 @@ struct DoubleProgressStyle: ProgressViewStyle {
       configuration.label
         .font(.caption)
         .monospacedDigit()
-        .foregroundColor(.secondary)
+        .foregroundStyle(.secondary)
     }
   }
 }

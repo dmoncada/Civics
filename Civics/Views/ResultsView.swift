@@ -25,7 +25,7 @@ struct ResultsView: View {
             Section(isExpanded: isExpanded(id)) {
               VStack(alignment: .leading, spacing: 8) {
                 ForEach(answers, id: \.self) { answer in
-                  AnswerRow(answer: answer, font: .system(size: 16))
+                  AnswerRow(answer: answer, font: .body)
                 }
               }
               .padding(.vertical, 8)
@@ -92,30 +92,32 @@ struct ResultsView: View {
     let question = vm.question(id: id)
     let isExpanded = expanded.contains(id)
 
-    HStack(alignment: .firstTextBaseline) {
-      Text(question.replaceEmphasized(with: .underline))
-        .font(.title3)
-        .multilineTextAlignment(.leading)
-        .foregroundStyle(correct ? .primary : .secondary)
-
-      Spacer()
-
-      Image(systemName: "chevron.right")
-        .rotationEffect(.degrees(isExpanded ? 90 : 0))
-        .animation(.easeInOut(duration: 0.25), value: isExpanded)
-        .foregroundStyle(.secondary)
-    }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.vertical, 8)
-    .background(Color.background)
-    .contentShape(Rectangle())
-    .onTapGesture {
+    Button {
       withAnimation {
         if expanded.remove(id) == nil {
           expanded.insert(id)
         }
       }
+    } label: {
+      HStack(alignment: .firstTextBaseline) {
+        Text(question.replaceEmphasized(with: .underline))
+          .font(.title3)
+          .multilineTextAlignment(.leading)
+          .foregroundStyle(correct ? .primary : .secondary)
+
+        Spacer()
+
+        Image(systemName: "chevron.right")
+          .rotationEffect(.degrees(isExpanded ? 90 : 0))
+          .animation(.easeInOut(duration: 0.25), value: isExpanded)
+          .foregroundStyle(.secondary)
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .padding(.vertical, 8)
+      .background(Color.background)
+      .contentShape(Rectangle())
     }
+    .buttonStyle(.plain)
   }
 }
 

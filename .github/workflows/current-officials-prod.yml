@@ -1,0 +1,45 @@
+name: Deploy production current-officials
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/current-officials/**"
+      - ".github/workflows/current-officials-prod.yml"
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  SERVICE_DIRECTORY: services/current-officials
+  AWS_REGION: us-west-2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.13" }
+      - uses: opentofu/setup-opentofu@v1
+      - uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_CURRENT_OFFICIALS_PROD_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Validate and package
+        working-directory: ${{ env.SERVICE_DIRECTORY }}
+        run: make check test package
+      - name: Apply production infrastructure
+        working-directory: ${{ env.SERVICE_DIRECTORY }}
+        env:
+          TOFU_STATE_BUCKET: ${{ secrets.TOFU_STATE_BUCKET }}
+          TF_VAR_production_certificate_arn: ${{ secrets.PRODUCTION_CERTIFICATE_ARN }}
+          TF_VAR_app_attest_root_sha256: ${{ secrets.APP_ATTEST_ROOT_SHA256 }}
+        run: |
+          tofu -chdir=infra init -backend-config="bucket=${TOFU_STATE_BUCKET}" -backend-config="key=civics/current-officials/prod.tfstate" -backend-config="region=${AWS_REGION}" -backend-config="use_lockfile=true"
+          tofu -chdir=infra apply -auto-approve -var-file=prod.tfvars
+          aws lambda invoke --function-name "$(tofu -chdir=infra output -raw refresh_function_name)" --invocation-type RequestResponse /tmp/refresh.json
+      - name: Smoke test
+        env: { PROD_TEST_KEY: ${{ secrets.CURRENT_OFFICIALS_PROD_TEST_KEY }} }
+        run: curl --fail-with-body --get -H "X-Civics-Test-Key: ${PROD_TEST_KEY}" "https://civics.dmoncada.net/api/v1/current-officials" --data-urlencode jurisdiction=WA

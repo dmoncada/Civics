@@ -24,7 +24,10 @@ package:
 	rm -rf $(DIST)/package $(PACKAGE)
 	mkdir -p $(DIST)/package
 	$(UV) export --locked --no-dev --format requirements-txt --output-file $(DIST)/requirements.txt
-	$(UV) pip install --quiet --no-deps --target $(DIST)/package -r $(DIST)/requirements.txt
+	docker run --rm --platform linux/amd64 --entrypoint pip \
+		-v "$(CURDIR)/$(DIST):/asset" \
+		public.ecr.aws/lambda/python:3.13 \
+		install --no-cache-dir --requirement /asset/requirements.txt --target /asset/package
 	cp -R src registry $(DIST)/package/
 	cd $(DIST)/package && zip -qr ../current-officials.zip .
 

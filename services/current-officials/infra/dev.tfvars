@@ -1,2 +1,2 @@
 region      = "us-west-2"
-environment = "staging"
+environment = "dev"

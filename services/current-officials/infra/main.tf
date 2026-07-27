@@ -60,9 +60,9 @@ resource "aws_cloudwatch_log_group" "lambda" {
   retention_in_days = 30
 }
 resource "aws_iam_role_policy" "runtime" {
-  for_each = aws_iam_role.lambda
+  for_each = local.lambda_names
   name     = "${each.key}-runtime"
-  role     = each.value.id
+  role     = aws_iam_role.lambda[each.key].id
   policy = jsonencode({ Version = "2012-10-17", Statement = concat(
     each.key == "api" ? [{ Effect = "Allow", Action = ["dynamodb:GetItem"], Resource = aws_dynamodb_table.officials.arn }] : [],
     each.key == "refresh" ? [{ Effect = "Allow", Action = ["dynamodb:PutItem"], Resource = aws_dynamodb_table.officials.arn }, { Effect = "Allow", Action = ["ssm:GetParameter"], Resource = aws_ssm_parameter.congress.arn }] : [],
@@ -79,7 +79,7 @@ resource "aws_lambda_function" "function" {
   filename         = local.zip
   source_code_hash = filebase64sha256(local.zip)
   timeout          = each.key == "refresh" ? 120 : 15
-  environment { variables = merge({ CONGRESSIONAL_TABLE_NAME = aws_dynamodb_table.officials.name }, contains(["attestation", "authorizer"], each.key) ? { APP_ATTEST_TABLE_NAME = aws_dynamodb_table.attest.name, APP_ATTEST_APP_ID = "E76XSQA67L.com.davidmoncada.Civics", TEST_API_KEY_PARAMETER = aws_ssm_parameter.test_key.name } : {}, each.key == "refresh" ? { CONGRESS_API_KEY_PARAMETER = aws_ssm_parameter.congress.name } : {}) }
+  environment { variables = merge({ CONGRESSIONAL_TABLE_NAME = aws_dynamodb_table.officials.name }, contains(["attestation", "authorizer"], each.key) ? { APP_ATTEST_TABLE_NAME = aws_dynamodb_table.attest.name, APP_ATTEST_APP_ID = "E76XSQA67L.com.davidmoncada.Civics", TEST_API_KEY_PARAMETER = aws_ssm_parameter.test_key.name, APPLE_APP_ATTEST_ROOT_SHA256 = var.app_attest_root_sha256 != null ? var.app_attest_root_sha256 : "" } : {}, each.key == "refresh" ? { CONGRESS_API_KEY_PARAMETER = aws_ssm_parameter.congress.name } : {}) }
   depends_on = [aws_cloudwatch_log_group.lambda]
 }
 resource "aws_api_gateway_rest_api" "api" {
@@ -97,6 +97,21 @@ resource "aws_api_gateway_resource" "officials" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.v1.id
   path_part   = "current-officials"
+}
+resource "aws_api_gateway_resource" "attestation" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.v1.id
+  path_part   = "attestation"
+}
+resource "aws_api_gateway_resource" "challenge" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.attestation.id
+  path_part   = "challenge"
+}
+resource "aws_api_gateway_resource" "register" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_resource.attestation.id
+  path_part   = "register"
 }
 resource "aws_api_gateway_authorizer" "attest" {
   count                            = local.prod ? 1 : 0
@@ -121,6 +136,34 @@ resource "aws_api_gateway_integration" "officials" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.function["api"].invoke_arn
 }
+resource "aws_api_gateway_method" "challenge" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.challenge.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+resource "aws_api_gateway_method" "register" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.register.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+resource "aws_api_gateway_integration" "challenge" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.challenge.id
+  http_method             = aws_api_gateway_method.challenge.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.function["attestation"].invoke_arn
+}
+resource "aws_api_gateway_integration" "register" {
+  rest_api_id             = aws_api_gateway_rest_api.api.id
+  resource_id             = aws_api_gateway_resource.register.id
+  http_method             = aws_api_gateway_method.register.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.function["attestation"].invoke_arn
+}
 resource "aws_lambda_permission" "api" {
   for_each      = aws_lambda_function.function
   statement_id  = "ApiGateway-${each.key}"
@@ -131,13 +174,33 @@ resource "aws_lambda_permission" "api" {
 }
 resource "aws_api_gateway_deployment" "api" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  triggers    = { redeployment = sha1(aws_api_gateway_integration.officials.id) }
+  triggers    = { redeployment = sha1(jsonencode([aws_api_gateway_integration.officials.id, aws_api_gateway_integration.challenge.id, aws_api_gateway_integration.register.id, try(aws_api_gateway_authorizer.attest[0].id, "")])) }
   lifecycle { create_before_destroy = true }
 }
 resource "aws_api_gateway_stage" "api" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.api.id
   stage_name    = var.environment
+}
+resource "aws_api_gateway_domain_name" "prod" {
+  count                    = local.prod ? 1 : 0
+  domain_name              = "civics.dmoncada.net"
+  regional_certificate_arn = var.production_certificate_arn
+  security_policy          = "TLS_1_2"
+  endpoint_configuration { types = ["REGIONAL"] }
+  lifecycle {
+    precondition {
+      condition     = var.production_certificate_arn != null
+      error_message = "Set production_certificate_arn when deploying prod."
+    }
+  }
+}
+resource "aws_api_gateway_base_path_mapping" "prod" {
+  count       = local.prod ? 1 : 0
+  api_id      = aws_api_gateway_rest_api.api.id
+  stage_name  = aws_api_gateway_stage.api.stage_name
+  domain_name = aws_api_gateway_domain_name.prod[0].domain_name
+  base_path   = "api"
 }
 resource "aws_cloudwatch_event_rule" "refresh" {
   name                = "${local.prefix}-daily-refresh"

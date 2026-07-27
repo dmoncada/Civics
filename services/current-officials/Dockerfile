@@ -1,0 +1,21 @@
+FROM ghcr.io/astral-sh/uv:0.11.29 AS uv
+FROM public.ecr.aws/lambda/python:3.13 AS requirements
+
+WORKDIR /build
+
+COPY --from=uv /uv /uvx /bin/
+COPY pyproject.toml uv.lock ./
+
+RUN uv export --locked --no-dev --format requirements-txt --output-file requirements.txt
+
+FROM public.ecr.aws/lambda/python:3.13 AS app
+
+COPY --from=requirements /build/requirements.txt ./
+
+RUN pip install --no-cache-dir --requirement requirements.txt --target "${LAMBDA_TASK_ROOT}"
+
+COPY src "${LAMBDA_TASK_ROOT}/src"
+COPY registry "${LAMBDA_TASK_ROOT}/registry"
+COPY docker "${LAMBDA_TASK_ROOT}/docker"
+
+CMD ["src.api.lambda_handler"]

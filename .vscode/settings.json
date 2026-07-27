@@ -1,6 +1,8 @@
 {
   "[swift]": {
-    "editor.defaultFormatter": "sweetpad.sweetpad",
+    "editor.defaultFormatter": "swiftlang.swift-vscode",
     "editor.formatOnSave": true
-  }
+  },
+
+  "python.defaultInterpreterPath": "${workspaceFolder}/services/current-officials/.venv/bin/python"
 }

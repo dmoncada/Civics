@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to SAM local API",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5890
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/services/current-officials",
+          "remoteRoot": "/var/task"
+        }
+      ],
+      "justMyCode": true
+    }
+  ]
+}

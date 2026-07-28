@@ -6,8 +6,8 @@ from typing import TypedDict
 class JurisdictionMetadata(TypedDict):
     code: str
     name: str
-    hasSenators: bool
-    representativeKind: str
+    has_senators: bool
+    representative_kind: str
 
 
 _STATES = (
@@ -67,8 +67,8 @@ JURISDICTIONS: dict[str, JurisdictionMetadata] = {
     code: {
         "code": code,
         "name": name,
-        "hasSenators": True,
-        "representativeKind": "representative",
+        "has_senators": True,
+        "representative_kind": "representative",
     }
     for code, name in _STATES
 }
@@ -78,38 +78,38 @@ JURISDICTIONS.update(
         "DC": {
             "code": "DC",
             "name": "District of Columbia",
-            "hasSenators": False,
-            "representativeKind": "delegate",
+            "has_senators": False,
+            "representative_kind": "delegate",
         },
         "AS": {
             "code": "AS",
             "name": "American Samoa",
-            "hasSenators": False,
-            "representativeKind": "delegate",
+            "has_senators": False,
+            "representative_kind": "delegate",
         },
         "GU": {
             "code": "GU",
             "name": "Guam",
-            "hasSenators": False,
-            "representativeKind": "delegate",
+            "has_senators": False,
+            "representative_kind": "delegate",
         },
         "MP": {
             "code": "MP",
             "name": "Northern Mariana Islands",
-            "hasSenators": False,
-            "representativeKind": "delegate",
+            "has_senators": False,
+            "representative_kind": "delegate",
         },
         "PR": {
             "code": "PR",
             "name": "Puerto Rico",
-            "hasSenators": False,
-            "representativeKind": "residentCommissioner",
+            "has_senators": False,
+            "representative_kind": "resident_commissioner",
         },
         "VI": {
             "code": "VI",
             "name": "U.S. Virgin Islands",
-            "hasSenators": False,
-            "representativeKind": "delegate",
+            "has_senators": False,
+            "representative_kind": "delegate",
         },
     }
 )

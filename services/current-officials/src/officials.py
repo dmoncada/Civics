@@ -11,7 +11,7 @@ def official_from_name(name: str) -> dict[str, object]:
             answer for answer in (display_name, first_and_last, last_name) if answer
         )
     )
-    return {"displayName": display_name, "acceptedAnswers": accepted_answers}
+    return {"display_name": display_name, "accepted_answers": accepted_answers}
 
 
 def display_name_from_congress_name(name: str) -> str:

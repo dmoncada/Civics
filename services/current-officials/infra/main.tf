@@ -27,7 +27,7 @@ resource "aws_dynamodb_table" "attest" {
     type = "S"
   }
   ttl {
-    attribute_name = "expiresAt"
+    attribute_name = "expires_at"
     enabled        = true
   }
   point_in_time_recovery { enabled = true }

@@ -76,9 +76,7 @@ def _fetch_record(jurisdiction: str, api_key: str) -> dict[str, Any]:
         raise RuntimeError("Congress.gov request failed") from error
 
     members = payload.get("members", [])
-    senators = [
-        official_from_name(member["name"]) for member in members if _is_senator(member)
-    ]
+    senators = [_official(member) for member in members if _is_senator(member)]
     representatives = [
         _representative(member) for member in members if _is_representative(member)
     ]
@@ -87,9 +85,9 @@ def _fetch_record(jurisdiction: str, api_key: str) -> dict[str, Any]:
         "jurisdiction": jurisdiction,
         "senators": senators,
         "representatives": representatives,
-        "asOf": _iso8601(now),
-        "refreshedAt": _iso8601(now),
-        "expiresAt": _iso8601(now + timedelta(days=1)),
+        "as_of": _iso8601(now),
+        "refreshed_at": _iso8601(now),
+        "expires_at": _iso8601(now + timedelta(days=1)),
         "source": {"name": "Congress.gov", "url": base_url},
     }
 
@@ -103,11 +101,21 @@ def _is_representative(member: dict[str, Any]) -> bool:
 
 
 def _representative(member: dict[str, Any]) -> dict[str, Any]:
-    representative = official_from_name(member["name"])
+    representative = _official(member)
     district = member.get("district")
     if district not in (None, "0", 0):
         representative["district"] = int(district)
     return representative
+
+
+def _official(member: dict[str, Any]) -> dict[str, Any]:
+    official = official_from_name(member["name"])
+    image = member.get("depiction") or member.get("image")
+    if isinstance(image, dict) and isinstance(image_url := image.get("imageUrl"), str):
+        official["image_url"] = image_url
+    if isinstance(party := member.get("partyName"), str):
+        official["party"] = party
+    return official
 
 
 def _current_chambers(member: dict[str, Any]) -> list[str]:

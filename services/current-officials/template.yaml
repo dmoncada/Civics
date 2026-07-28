@@ -9,6 +9,8 @@ Resources:
       DockerContext: .
       Dockerfile: Dockerfile
       DockerTag: current-officials-local
+      DockerBuildArgs:
+        SAM_LOCAL_DEBUG: "true"
     Properties:
       PackageType: Image
       Architectures:

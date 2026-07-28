@@ -4,5 +4,12 @@
     "editor.formatOnSave": true
   },
 
-  "python.defaultInterpreterPath": "${workspaceFolder}/services/current-officials/.venv/bin/python"
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  },
+
+  "python.defaultInterpreterPath": "${workspaceFolder}/services/current-officials/.venv/bin/python",
+  "python.languageServer": "Pylance",
+  "ty.disableLanguageServices": true
 }

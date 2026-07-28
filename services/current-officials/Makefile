@@ -2,7 +2,7 @@ UV ?= uv
 DIST := dist
 PACKAGE := $(DIST)/current-officials.zip
 
-.PHONY: test lint format check typecheck package local-api clean
+.PHONY: test lint format check typecheck package local-api local-api-debug clean
 
 test:
 	$(UV) run pytest
@@ -33,6 +33,9 @@ package:
 
 local-api:
 	./scripts/start-api.sh
+
+local-api-debug:
+	SAM_DEBUG_PORT=5890 ./scripts/start-api.sh
 
 clean:
 	rm -rf $(DIST)

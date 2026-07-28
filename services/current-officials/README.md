@@ -61,10 +61,33 @@ curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA'
 
 The response contains all of the jurisdiction's representatives in `representatives`. Numbered
 districts are integers; representatives without a district omit `district`.
+Each official includes an `image_url`. Officials with a party affiliation include `party`.
 
 `make local-api` starts Compose, builds and starts SAM, then invokes the refresh Lambda once.
 Stop it with `Ctrl-C`; the script stops SAM and runs `docker compose --profile refresh down`
 automatically.
+
+### Debug the local API in VS Code
+
+Open the repository root in VS Code and install the Python extension. Set a breakpoint in
+`services/current-officials/src/api.py`, then start the debug-enabled local stack:
+
+```sh
+cd services/current-officials
+make local-api-debug
+```
+
+Invoke the endpoint in another terminal; it will wait for the debugger to attach:
+
+```sh
+curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA'
+```
+
+Then choose **Run and Debug** > **Attach to SAM local API** in VS Code. The first request causes
+SAM to open port 5890, so attaching before that request returns `ECONNREFUSED`. The request waits
+until VS Code connects, leaving time to attach and step through the handler. The debug command
+uses port 5890 and keeps the API Lambda container warm. Stop the stack with `Ctrl-C` in the
+terminal running `make local-api-debug`.
 
 The API uses `DYNAMODB_ENDPOINT_URL` only when it is set; Compose sets it to the local DynamoDB
 container, while AWS Lambda continues to use DynamoDB's standard AWS endpoint. Stop the local
@@ -81,7 +104,7 @@ curl -X POST http://localhost:9001/2015-03-31/functions/function/invocations -d 
 
 `registry/current-officials.json` is the reviewed record for the president, vice president,
 Speaker, Chief Justice, and governors. Each registry change must cite an official source in the
-pull request and update `asOf`. Congressional data is refreshed daily from Congress.gov and
+pull request and update `as_of`. Congressional data is refreshed daily from Congress.gov and
 cached in DynamoDB.
 
 ## AWS infrastructure and deployment

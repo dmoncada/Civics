@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-24T00:00:00.000Z",
+  "as_of": "2026-07-27T00:00:00.000Z",
   "sources": [
     { "name": "The White House", "url": "https://www.whitehouse.gov/administration/" },
     { "name": "U.S. House of Representatives", "url": "https://www.house.gov/leadership" },
@@ -7,66 +7,360 @@
     { "name": "National Governors Association", "url": "https://www.nga.org/governors/" }
   ],
   "national": {
-    "president": { "displayName": "Donald J. Trump", "acceptedAnswers": ["Donald J. Trump", "Donald Trump", "Trump"] },
-    "vicePresident": { "displayName": "J.D. Vance", "acceptedAnswers": ["J.D. Vance", "JD Vance", "Vance"] },
-    "speaker": { "displayName": "Mike Johnson", "acceptedAnswers": ["Mike Johnson", "James Michael Johnson", "Johnson"] },
-    "chiefJustice": { "displayName": "John G. Roberts, Jr.", "acceptedAnswers": ["John G. Roberts, Jr.", "John Roberts", "Roberts"] }
+    "president": {
+      "display_name": "Donald J. Trump",
+      "accepted_answers": ["Donald J. Trump", "Donald Trump", "Trump"],
+      "image_url": "https://www.whitehouse.gov/wp-content/uploads/2026/01/President-Donald-Trump-Official-Presidential-Portrait.png-1-1.jpg",
+      "party": "Republican"
+    },
+    "vice_president": {
+      "display_name": "J.D. Vance",
+      "accepted_answers": ["J.D. Vance", "JD Vance", "Vance"],
+      "image_url": "https://www.whitehouse.gov/wp-content/uploads/2026/01/Vice-President-J.D.-Vance.jpg-1.jpg",
+      "party": "Republican"
+    },
+    "speaker": {
+      "display_name": "Mike Johnson",
+      "accepted_answers": ["Mike Johnson", "James Michael Johnson", "Johnson"],
+      "image_url": "https://www.house.gov/sites/default/files/2023-10/mikejohnson.jpg",
+      "party": "Republican"
+    },
+    "chief_justice": {
+      "display_name": "John G. Roberts, Jr.",
+      "accepted_answers": ["John G. Roberts, Jr.", "John Roberts", "Roberts"],
+      "image_url": "https://www.supremecourt.gov/about/justice_pictures/Roberts_8807-16_Crop.jpg"
+    }
   },
   "governors": {
-    "AL": { "displayName": "Kay Ivey", "acceptedAnswers": ["Kay Ivey", "Ivey"] },
-    "AK": { "displayName": "Mike Dunleavy", "acceptedAnswers": ["Mike Dunleavy", "Dunleavy"] },
-    "AS": { "displayName": "Pula'ali'i Nikolao Pula", "acceptedAnswers": ["Pula’ali’i Nikolao Pula", "Nikolao Pula", "Pula"] },
-    "AZ": { "displayName": "Katie Hobbs", "acceptedAnswers": ["Katie Hobbs", "Hobbs"] },
-    "AR": { "displayName": "Sarah Huckabee Sanders", "acceptedAnswers": ["Sarah Huckabee Sanders", "Sarah Sanders", "Sanders"] },
-    "CA": { "displayName": "Gavin Newsom", "acceptedAnswers": ["Gavin Newsom", "Newsom"] },
-    "CO": { "displayName": "Jared Polis", "acceptedAnswers": ["Jared Polis", "Polis"] },
-    "CT": { "displayName": "Ned Lamont", "acceptedAnswers": ["Ned Lamont", "Lamont"] },
-    "DE": { "displayName": "Matt Meyer", "acceptedAnswers": ["Matt Meyer", "Meyer"] },
-    "FL": { "displayName": "Ron DeSantis", "acceptedAnswers": ["Ron DeSantis", "DeSantis"] },
-    "GA": { "displayName": "Brian Kemp", "acceptedAnswers": ["Brian Kemp", "Kemp"] },
-    "GU": { "displayName": "Lou Leon Guerrero", "acceptedAnswers": ["Lou Leon Guerrero", "Leon Guerrero"] },
-    "HI": { "displayName": "Josh Green", "acceptedAnswers": ["Josh Green", "Green"] },
-    "IA": { "displayName": "Kim Reynolds", "acceptedAnswers": ["Kim Reynolds", "Reynolds"] },
-    "ID": { "displayName": "Brad Little", "acceptedAnswers": ["Brad Little", "Little"] },
-    "IL": { "displayName": "J. B. Pritzker", "acceptedAnswers": ["J. B. Pritzker", "JB Pritzker", "Pritzker"] },
-    "IN": { "displayName": "Mike Braun", "acceptedAnswers": ["Mike Braun", "Braun"] },
-    "KS": { "displayName": "Laura Kelly", "acceptedAnswers": ["Laura Kelly", "Kelly"] },
-    "KY": { "displayName": "Andy Beshear", "acceptedAnswers": ["Andy Beshear", "Beshear"] },
-    "LA": { "displayName": "Jeff Landry", "acceptedAnswers": ["Jeff Landry", "Landry"] },
-    "MA": { "displayName": "Maura Healey", "acceptedAnswers": ["Maura Healey", "Healey"] },
-    "MD": { "displayName": "Wes Moore", "acceptedAnswers": ["Wes Moore", "Moore"] },
-    "ME": { "displayName": "Janet Mills", "acceptedAnswers": ["Janet Mills", "Mills"] },
-    "MI": { "displayName": "Gretchen Whitmer", "acceptedAnswers": ["Gretchen Whitmer", "Whitmer"] },
-    "MN": { "displayName": "Tim Walz", "acceptedAnswers": ["Tim Walz", "Walz"] },
-    "MO": { "displayName": "Mike Kehoe", "acceptedAnswers": ["Mike Kehoe", "Kehoe"] },
-    "MP": { "displayName": "David M. Apatang", "acceptedAnswers": ["David M. Apatang", "David Apatang", "Apatang"] },
-    "MS": { "displayName": "Tate Reeves", "acceptedAnswers": ["Tate Reeves", "Reeves"] },
-    "MT": { "displayName": "Greg Gianforte", "acceptedAnswers": ["Greg Gianforte", "Gianforte"] },
-    "NC": { "displayName": "Josh Stein", "acceptedAnswers": ["Josh Stein", "Stein"] },
-    "ND": { "displayName": "Kelly Armstrong", "acceptedAnswers": ["Kelly Armstrong", "Armstrong"] },
-    "NE": { "displayName": "Jim Pillen", "acceptedAnswers": ["Jim Pillen", "Pillen"] },
-    "NH": { "displayName": "Kelly Ayotte", "acceptedAnswers": ["Kelly Ayotte", "Ayotte"] },
-    "NJ": { "displayName": "Mikie Sherrill", "acceptedAnswers": ["Mikie Sherrill", "Sherrill"] },
-    "NM": { "displayName": "Michelle Lujan Grisham", "acceptedAnswers": ["Michelle Lujan Grisham", "Lujan Grisham", "Grisham"] },
-    "NV": { "displayName": "Joe Lombardo", "acceptedAnswers": ["Joe Lombardo", "Lombardo"] },
-    "NY": { "displayName": "Kathy Hochul", "acceptedAnswers": ["Kathy Hochul", "Hochul"] },
-    "OH": { "displayName": "Mike DeWine", "acceptedAnswers": ["Mike DeWine", "DeWine"] },
-    "OK": { "displayName": "Kevin Stitt", "acceptedAnswers": ["Kevin Stitt", "Stitt"] },
-    "OR": { "displayName": "Tina Kotek", "acceptedAnswers": ["Tina Kotek", "Kotek"] },
-    "PA": { "displayName": "Josh Shapiro", "acceptedAnswers": ["Josh Shapiro", "Shapiro"] },
-    "PR": { "displayName": "Jenniffer González-Colón", "acceptedAnswers": ["Jenniffer González-Colón", "Jenniffer Gonzalez-Colon", "González-Colón", "Gonzalez-Colon"] },
-    "RI": { "displayName": "Dan McKee", "acceptedAnswers": ["Dan McKee", "McKee"] },
-    "SC": { "displayName": "Henry McMaster", "acceptedAnswers": ["Henry McMaster", "McMaster"] },
-    "SD": { "displayName": "Larry Rhoden", "acceptedAnswers": ["Larry Rhoden", "Rhoden"] },
-    "TN": { "displayName": "Bill Lee", "acceptedAnswers": ["Bill Lee", "Lee"] },
-    "TX": { "displayName": "Greg Abbott", "acceptedAnswers": ["Greg Abbott", "Abbott"] },
-    "UT": { "displayName": "Spencer Cox", "acceptedAnswers": ["Spencer Cox", "Cox"] },
-    "VA": { "displayName": "Abigail Spanberger", "acceptedAnswers": ["Abigail Spanberger", "Spanberger"] },
-    "VI": { "displayName": "Albert Bryan", "acceptedAnswers": ["Albert Bryan", "Bryan"] },
-    "VT": { "displayName": "Phil Scott", "acceptedAnswers": ["Phil Scott", "Scott"] },
-    "WA": { "displayName": "Bob Ferguson", "acceptedAnswers": ["Bob Ferguson", "Ferguson"] },
-    "WI": { "displayName": "Tony Evers", "acceptedAnswers": ["Tony Evers", "Evers"] },
-    "WV": { "displayName": "Patrick Morrisey", "acceptedAnswers": ["Patrick Morrisey", "Morrisey"] },
-    "WY": { "displayName": "Mark Gordon", "acceptedAnswers": ["Mark Gordon", "Gordon"] }
+    "AL": {
+      "display_name": "Kay Ivey",
+      "accepted_answers": ["Kay Ivey", "Ivey"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2018/01/Governor-Ivey-2019-Headshot-scaled.jpg",
+      "party": "Republican"
+    },
+    "AK": {
+      "display_name": "Mike Dunleavy",
+      "accepted_answers": ["Mike Dunleavy", "Dunleavy"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/Gov_Dunleavy_Sep2023_square-scaled.jpg",
+      "party": "Republican"
+    },
+    "AS": {
+      "display_name": "Pula'ali'i Nikolao Pula",
+      "accepted_answers": ["Pula’ali’i Nikolao Pula", "Nikolao Pula", "Pula"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/GOV_PULA_2025.jpg",
+      "party": "Republican"
+    },
+    "AZ": {
+      "display_name": "Katie Hobbs",
+      "accepted_answers": ["Katie Hobbs", "Hobbs"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/governor-katie-hobbs-scaled.jpeg",
+      "party": "Democratic"
+    },
+    "AR": {
+      "display_name": "Sarah Huckabee Sanders",
+      "accepted_answers": ["Sarah Huckabee Sanders", "Sarah Sanders", "Sanders"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/Governor-Headshot-sanders-e1756131825437.jpg",
+      "party": "Republican"
+    },
+    "CA": {
+      "display_name": "Gavin Newsom",
+      "accepted_answers": ["Gavin Newsom", "Newsom"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/1200px-Gavin_Newsom_official_photo_square.jpg",
+      "party": "Democratic"
+    },
+    "CO": {
+      "display_name": "Jared Polis",
+      "accepted_answers": ["Jared Polis", "Polis"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/01/Colorado-Jared-Polis-November-2019.jpg",
+      "party": "Democratic"
+    },
+    "CT": {
+      "display_name": "Ned Lamont",
+      "accepted_answers": ["Ned Lamont", "Lamont"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/govlamont-scaled.jpg",
+      "party": "Democratic"
+    },
+    "DE": {
+      "display_name": "Matt Meyer",
+      "accepted_answers": ["Matt Meyer", "Meyer"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/matt-meyer_800x600.jpg",
+      "party": "Democratic"
+    },
+    "FL": {
+      "display_name": "Ron DeSantis",
+      "accepted_answers": ["Ron DeSantis", "DeSantis"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/Ron_DeSantis_Official_Portrait_113th_Congress.jpg",
+      "party": "Republican"
+    },
+    "GA": {
+      "display_name": "Brian Kemp",
+      "accepted_answers": ["Brian Kemp", "Kemp"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/GovBrianKemp_2024WEB.jpg",
+      "party": "Republican"
+    },
+    "GU": {
+      "display_name": "Lou Leon Guerrero",
+      "accepted_answers": ["Lou Leon Guerrero", "Leon Guerrero"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/GUAM-LOURDES-LEON-GUERRERO_square-scaled.jpg",
+      "party": "Democratic"
+    },
+    "HI": {
+      "display_name": "Josh Green",
+      "accepted_answers": ["Josh Green", "Green"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2022/12/Governor_Josh_Green.jpg",
+      "party": "Democratic"
+    },
+    "IA": {
+      "display_name": "Kim Reynolds",
+      "accepted_answers": ["Kim Reynolds", "Reynolds"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/Governor-Reynolds-2025-Headshot_square.jpg",
+      "party": "Republican"
+    },
+    "ID": {
+      "display_name": "Brad Little",
+      "accepted_answers": ["Brad Little", "Little"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/governor_little_square.jpg",
+      "party": "Republican"
+    },
+    "IL": {
+      "display_name": "J. B. Pritzker",
+      "accepted_answers": ["J. B. Pritzker", "JB Pritzker", "Pritzker"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/2026-JB-Headshot.jpg",
+      "party": "Democratic"
+    },
+    "IN": {
+      "display_name": "Mike Braun",
+      "accepted_answers": ["Mike Braun", "Braun"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/GMB-Official-Headshot-scaled.jpg",
+      "party": "Republican"
+    },
+    "KS": {
+      "display_name": "Laura Kelly",
+      "accepted_answers": ["Laura Kelly", "Kelly"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/kelly_square.jpg",
+      "party": "Democratic"
+    },
+    "KY": {
+      "display_name": "Andy Beshear",
+      "accepted_answers": ["Andy Beshear", "Beshear"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/12/Governor-Beshear_Official-Picture_square-scaled.jpg",
+      "party": "Democratic"
+    },
+    "LA": {
+      "display_name": "Jeff Landry",
+      "accepted_answers": ["Jeff Landry", "Landry"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2024/01/Governor-Landry-Official-Portrait_square-scaled.jpg",
+      "party": "Republican"
+    },
+    "MA": {
+      "display_name": "Maura Healey",
+      "accepted_answers": ["Maura Healey", "Healey"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/Maura_Healey_square.jpg",
+      "party": "Democratic"
+    },
+    "MD": {
+      "display_name": "Wes Moore",
+      "accepted_answers": ["Wes Moore", "Moore"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/governor-wes-moore-official-portrait_square.jpg",
+      "party": "Democratic"
+    },
+    "ME": {
+      "display_name": "Janet Mills",
+      "accepted_answers": ["Janet Mills", "Mills"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/3218_Gov-Janet-Mills-20230307_square-scaled.jpg",
+      "party": "Democratic"
+    },
+    "MI": {
+      "display_name": "Gretchen Whitmer",
+      "accepted_answers": ["Gretchen Whitmer", "Whitmer"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/GovWhitmerPortMaster_square-scaled.jpg",
+      "party": "Democratic"
+    },
+    "MN": {
+      "display_name": "Tim Walz",
+      "accepted_answers": ["Tim Walz", "Walz"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/Governor-Walz-2024_square.jpg",
+      "party": "Democratic"
+    },
+    "MO": {
+      "display_name": "Mike Kehoe",
+      "accepted_answers": ["Mike Kehoe", "Kehoe"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Governor-Mike-Kehoe_square-scaled.jpg",
+      "party": "Republican"
+    },
+    "MP": {
+      "display_name": "David M. Apatang",
+      "accepted_answers": ["David M. Apatang", "David Apatang", "Apatang"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/07/David-M-Apatang-Head-Shot.jpg",
+      "party": "Republican"
+    },
+    "MS": {
+      "display_name": "Tate Reeves",
+      "accepted_answers": ["Tate Reeves", "Reeves"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2020/01/headshot-governor-tate-reeves_R_square.jpg",
+      "party": "Republican"
+    },
+    "MT": {
+      "display_name": "Greg Gianforte",
+      "accepted_answers": ["Greg Gianforte", "Gianforte"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2020/11/Montana-Greg-Gianforte-January-2021.jpg",
+      "party": "Republican"
+    },
+    "NC": {
+      "display_name": "Josh Stein",
+      "accepted_answers": ["Josh Stein", "Stein"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Josh-Stein_NC.jpg",
+      "party": "Democratic"
+    },
+    "ND": {
+      "display_name": "Kelly Armstrong",
+      "accepted_answers": ["Kelly Armstrong", "Armstrong"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2024/12/GovernorArmstrong.jpg",
+      "party": "Republican"
+    },
+    "NE": {
+      "display_name": "Jim Pillen",
+      "accepted_answers": ["Jim Pillen", "Pillen"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/Governor_Pillen.png",
+      "party": "Republican"
+    },
+    "NH": {
+      "display_name": "Kelly Ayotte",
+      "accepted_answers": ["Kelly Ayotte", "Ayotte"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/ayotte_portrait-for-online.jpg",
+      "party": "Republican"
+    },
+    "NJ": {
+      "display_name": "Mikie Sherrill",
+      "accepted_answers": ["Mikie Sherrill", "Sherrill"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2026/01/home-gov_official_square.jpg",
+      "party": "Democratic"
+    },
+    "NM": {
+      "display_name": "Michelle Lujan Grisham",
+      "accepted_answers": ["Michelle Lujan Grisham", "Lujan Grisham", "Grisham"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/02/New-Mexico-Michelle-Lujan-Grisham-January-2018.jpg",
+      "party": "Democratic"
+    },
+    "NV": {
+      "display_name": "Joe Lombardo",
+      "accepted_answers": ["Joe Lombardo", "Lombardo"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/Governor-Joe-Lombardo_Official-Photo-scaled.jpg",
+      "party": "Republican"
+    },
+    "NY": {
+      "display_name": "Kathy Hochul",
+      "accepted_answers": ["Kathy Hochul", "Hochul"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2021/08/GovernorHochul.jpg",
+      "party": "Democratic"
+    },
+    "OH": {
+      "display_name": "Mike DeWine",
+      "accepted_answers": ["Mike DeWine", "DeWine"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/01/Gov-Mike-DeWine.jpg",
+      "party": "Republican"
+    },
+    "OK": {
+      "display_name": "Kevin Stitt",
+      "accepted_answers": ["Kevin Stitt", "Stitt"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/06/Oklahoma-Kevin-Stitt-June-2019.jpg",
+      "party": "Republican"
+    },
+    "OR": {
+      "display_name": "Tina Kotek",
+      "accepted_answers": ["Tina Kotek", "Kotek"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/Governor-Tina-Kotek_Official.jpg",
+      "party": "Democratic"
+    },
+    "PA": {
+      "display_name": "Josh Shapiro",
+      "accepted_answers": ["Josh Shapiro", "Shapiro"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2023/01/JDS_headshot.png",
+      "party": "Democratic"
+    },
+    "PR": {
+      "display_name": "Jenniffer González-Colón",
+      "accepted_answers": ["Jenniffer González-Colón", "Jenniffer Gonzalez-Colon", "González-Colón", "Gonzalez-Colon"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Governor_Jenniffer_Gonzalez-scaled.jpg",
+      "party": "Republican"
+    },
+    "RI": {
+      "display_name": "Dan McKee",
+      "accepted_answers": ["Dan McKee", "McKee"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2021/03/Gov-Dan-Mckee-400.png",
+      "party": "Democratic"
+    },
+    "SC": {
+      "display_name": "Henry McMaster",
+      "accepted_answers": ["Henry McMaster", "McMaster"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/McMaster-Gov.-2025a-full-size_square-scaled.jpg",
+      "party": "Republican"
+    },
+    "SD": {
+      "display_name": "Larry Rhoden",
+      "accepted_answers": ["Larry Rhoden", "Rhoden"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Governor-Rhoden-square-scaled.jpg",
+      "party": "Republican"
+    },
+    "TN": {
+      "display_name": "Bill Lee",
+      "accepted_answers": ["Bill Lee", "Lee"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/GBL_2022_square.jpg",
+      "party": "Republican"
+    },
+    "TX": {
+      "display_name": "Greg Abbott",
+      "accepted_answers": ["Greg Abbott", "Abbott"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2018/07/TX_Gov_Greg_Abbott.png",
+      "party": "Republican"
+    },
+    "UT": {
+      "display_name": "Spencer Cox",
+      "accepted_answers": ["Spencer Cox", "Cox"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2021/01/Governor_Cox_official_square-scaled.jpg",
+      "party": "Republican"
+    },
+    "VA": {
+      "display_name": "Abigail Spanberger",
+      "accepted_answers": ["Abigail Spanberger", "Spanberger"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2026/01/Abigail_Spanberger_2026.jpg",
+      "party": "Democratic"
+    },
+    "VI": {
+      "display_name": "Albert Bryan",
+      "accepted_answers": ["Albert Bryan", "Bryan"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/gov_bryan_square.jpg",
+      "party": "Democratic"
+    },
+    "VT": {
+      "display_name": "Phil Scott",
+      "accepted_answers": ["Phil Scott", "Scott"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/02/Vermont-Phil-Scott-November-2018.jpg",
+      "party": "Republican"
+    },
+    "WA": {
+      "display_name": "Bob Ferguson",
+      "accepted_answers": ["Bob Ferguson", "Ferguson"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Bob_Ferguson.jpg",
+      "party": "Democrat"
+    },
+    "WI": {
+      "display_name": "Tony Evers",
+      "accepted_answers": ["Tony Evers", "Evers"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/09/Wisconsin-Tony-Evers-January-2019.jpg",
+      "party": "Democratic"
+    },
+    "WV": {
+      "display_name": "Patrick Morrisey",
+      "accepted_answers": ["Patrick Morrisey", "Morrisey"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2025/01/Patrick-Morrisey-scaled-1.jpg",
+      "party": "Republican"
+    },
+    "WY": {
+      "display_name": "Mark Gordon",
+      "accepted_answers": ["Mark Gordon", "Gordon"],
+      "image_url": "https://www.nga.org/wp-content/uploads/2019/01/Wyoming-Mark-Gordon-November-2019.jpg",
+      "party": "Republican"
+    }
   }
 }

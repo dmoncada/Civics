@@ -15,19 +15,19 @@ def make_response(
     if not metadata:
         raise ValueError(f"Unsupported jurisdiction: {congressional['jurisdiction']}")
 
-    as_of = min(congressional["asOf"], registry["asOf"])
+    as_of = min(congressional["as_of"], registry["as_of"])
     current_time = now or datetime.now(UTC)
     freshness = (
         "fresh"
-        if _parse_iso8601(congressional["expiresAt"]) > current_time
+        if _parse_iso8601(congressional["expires_at"]) > current_time
         else "stale"
     )
 
     response: dict[str, Any] = {
         "jurisdiction": metadata,
-        "senators": congressional["senators"] if metadata["hasSenators"] else [],
+        "senators": congressional["senators"] if metadata["has_senators"] else [],
         "national": registry["national"],
-        "asOf": as_of,
+        "as_of": as_of,
         "freshness": freshness,
         "sources": [congressional["source"], *registry["sources"]],
     }

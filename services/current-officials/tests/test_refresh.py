@@ -1,6 +1,6 @@
 import pytest
 
-from src.refresh import _load_api_key, _representative
+from src.refresh import _load_api_key, _official, _representative
 
 
 def test_load_api_key_uses_local_environment_value(
@@ -31,3 +31,16 @@ def test_retains_numbered_districts() -> None:
     representative = _representative({"name": "Example Member", "district": 10})
 
     assert representative["district"] == 10
+
+
+def test_retains_congress_portrait_and_party() -> None:
+    official = _official(
+        {
+            "name": "Example Member",
+            "depiction": {"imageUrl": "https://example.gov/member.jpg"},
+            "partyName": "Example Party",
+        }
+    )
+
+    assert official["image_url"] == "https://example.gov/member.jpg"
+    assert official["party"] == "Example Party"

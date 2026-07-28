@@ -75,22 +75,22 @@ def _new_challenge() -> dict[str, str]:
         Item={
             "id": f"CHALLENGE#{challenge_id}",
             "challenge": _encode(challenge),
-            "expiresAt": int(time.time()) + _CHALLENGE_TTL_SECONDS,
+            "expires_at": int(time.time()) + _CHALLENGE_TTL_SECONDS,
         },
         ConditionExpression="attribute_not_exists(id)",
     )
-    return {"challengeId": challenge_id, "challenge": _encode(challenge)}
+    return {"challenge_id": challenge_id, "challenge": _encode(challenge)}
 
 
 def _register(payload: dict[str, Any]) -> None:
-    key_id = _required_string(payload, "keyId")
-    challenge = _consume_challenge(_required_string(payload, "challengeId"))
+    key_id = _required_string(payload, "key_id")
+    challenge = _consume_challenge(_required_string(payload, "challenge_id"))
     attestation = _decode(_required_string(payload, "attestation"))
     public_key = _verify_attestation(attestation, key_id, challenge)
     _table().put_item(
         Item={
             "id": f"KEY#{key_id}",
-            "publicKey": _encode(public_key),
+            "public_key": _encode(public_key),
             "counter": 0,
         },
         ConditionExpression="attribute_not_exists(id)",
@@ -118,7 +118,7 @@ def _verify_assertion(headers: dict[str, str], event: dict[str, Any]) -> None:
     counter = int.from_bytes(authenticator_data[33:37], "big")
     if counter <= int(record["counter"]):
         raise ValueError("Replayed App Attest assertion")
-    public_key = _public_key(_decode(record["publicKey"]))
+    public_key = _public_key(_decode(record["public_key"]))
     signed = hashlib.sha256(
         authenticator_data + hashlib.sha256(client_data).digest()
     ).digest()
@@ -178,7 +178,7 @@ def _consume_challenge(challenge_id: str) -> bytes:
         Key={"id": f"CHALLENGE#{challenge_id}"}, ReturnValues="ALL_OLD"
     )
     item = response.get("Attributes")
-    if not item or int(item["expiresAt"]) < int(time.time()):
+    if not item or int(item["expires_at"]) < int(time.time()):
         raise ValueError("Expired or used challenge")
     return _decode(item["challenge"])
 

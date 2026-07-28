@@ -47,20 +47,20 @@ def _record() -> dict[str, Any]:
         "jurisdiction": "WA",
         "senators": [
             {
-                "displayName": "Example Senator",
-                "acceptedAnswers": ["Example Senator", "Senator"],
+                "display_name": "Example Senator",
+                "accepted_answers": ["Example Senator", "Senator"],
             }
         ],
         "representatives": [
             {
-                "displayName": "Example Representative",
-                "acceptedAnswers": ["Example Representative", "Representative"],
+                "display_name": "Example Representative",
+                "accepted_answers": ["Example Representative", "Representative"],
                 "district": 1,
             }
         ],
-        "asOf": "2026-07-25T00:00:00.000Z",
-        "refreshedAt": "2026-07-25T00:00:00.000Z",
-        "expiresAt": "2099-01-01T00:00:00.000Z",
+        "as_of": "2026-07-25T00:00:00.000Z",
+        "refreshed_at": "2026-07-25T00:00:00.000Z",
+        "expires_at": "2099-01-01T00:00:00.000Z",
         "source": {"name": "Local seed", "url": "https://example.invalid/local-seed"},
     }
 

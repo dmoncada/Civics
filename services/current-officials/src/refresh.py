@@ -80,12 +80,7 @@ def _fetch_record(jurisdiction: str, api_key: str) -> dict[str, Any]:
         official_from_name(member["name"]) for member in members if _is_senator(member)
     ]
     representatives = [
-        {
-            **official_from_name(member["name"]),
-            "district": _district_value(member.get("district")),
-        }
-        for member in members
-        if _is_representative(member)
+        _representative(member) for member in members if _is_representative(member)
     ]
     now = datetime.now(UTC)
     return {
@@ -107,6 +102,14 @@ def _is_representative(member: dict[str, Any]) -> bool:
     return bool({"House of Representatives", "House"} & set(_current_chambers(member)))
 
 
+def _representative(member: dict[str, Any]) -> dict[str, Any]:
+    representative = official_from_name(member["name"])
+    district = member.get("district")
+    if district not in (None, "0", 0):
+        representative["district"] = int(district)
+    return representative
+
+
 def _current_chambers(member: dict[str, Any]) -> list[str]:
     terms = member.get("terms", {}).get("item", [])
     return [
@@ -114,10 +117,6 @@ def _current_chambers(member: dict[str, Any]) -> list[str]:
         for term in terms
         if term.get("endYear") is None and isinstance(term.get("chamber"), str)
     ]
-
-
-def _district_value(value: object) -> str:
-    return "AL" if value in (None, 0, "0") else str(value)
 
 
 def _iso8601(value: datetime) -> str:

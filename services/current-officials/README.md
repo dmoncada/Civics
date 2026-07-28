@@ -23,7 +23,7 @@ For example:
 
 ```sh
 CONGRESSIONAL_TABLE_NAME=current-officials \
-  uv run python -c 'from src.api import lambda_handler; print(lambda_handler({"queryStringParameters":{"jurisdiction":"WA","district":"10"}}, None))'
+  uv run python -c 'from src.api import lambda_handler; print(lambda_handler({"queryStringParameters":{"jurisdiction":"WA"}}, None))'
 ```
 
 For a local refresh, copy `.env.example` to `.env`, set `CONGRESS_API_KEY`, and load it with
@@ -39,7 +39,7 @@ The seed job creates the `current-officials` table and inserts a deterministic W
 ```sh
 docker compose up --build
 curl -X POST http://localhost:9000/2015-03-31/functions/function/invocations \
-  -d '{"queryStringParameters":{"jurisdiction":"WA","district":"10"}}'
+  -d '{"queryStringParameters":{"jurisdiction":"WA"}}'
 ```
 
 ### Local HTTP API with SAM
@@ -56,8 +56,11 @@ In another terminal, call the API directly. Query parameters are converted to th
 by SAM, so no Lambda invocation payload is needed:
 
 ```sh
-curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA&district=10'
+curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA'
 ```
+
+The response contains all of the jurisdiction's representatives in `representatives`. Numbered
+districts are integers; representatives without a district omit `district`.
 
 `make local-api` starts Compose, builds and starts SAM, then invokes the refresh Lambda once.
 Stop it with `Ctrl-C`; the script stops SAM and runs `docker compose --profile refresh down`

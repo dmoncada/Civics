@@ -55,7 +55,7 @@ def _record() -> dict[str, Any]:
             {
                 "displayName": "Example Representative",
                 "acceptedAnswers": ["Example Representative", "Representative"],
-                "district": "10",
+                "district": 1,
             }
         ],
         "asOf": "2026-07-25T00:00:00.000Z",

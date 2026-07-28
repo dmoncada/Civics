@@ -15,7 +15,7 @@ from .officials import official_from_name
 from .storage import put_congressional_record
 
 _ssm = boto3.client("ssm")
-_USER_AGENT = "Civics-current-officials/1.0"
+_USER_AGENT = "Civics-officials/1.0"
 
 
 def lambda_handler(_event: dict[str, Any], _context: object) -> None:

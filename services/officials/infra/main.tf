@@ -4,7 +4,7 @@ data "aws_partition" "current" {}
 locals {
   prefix       = "civics-officials-${var.environment}"
   prod         = var.environment == "prod"
-  zip          = "${path.module}/../dist/current-officials.zip"
+  zip          = "${path.module}/../dist/officials.zip"
   lambda_names = toset(["api", "refresh", "attestation", "authorizer"])
 }
 
@@ -39,7 +39,7 @@ resource "aws_ssm_parameter" "congress" {
   lifecycle { ignore_changes = [value] }
 }
 resource "aws_ssm_parameter" "test_key" {
-  name  = "/civics/${var.environment}/current-officials-test-key"
+  name  = "/civics/${var.environment}/officials-test-key"
   type  = "SecureString"
   value = "managed-outside-tofu"
   lifecycle { ignore_changes = [value] }
@@ -96,7 +96,7 @@ resource "aws_api_gateway_resource" "v1" {
 resource "aws_api_gateway_resource" "officials" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.v1.id
-  path_part   = "current-officials"
+  path_part   = "officials"
 }
 resource "aws_api_gateway_resource" "attestation" {
   rest_api_id = aws_api_gateway_rest_api.api.id

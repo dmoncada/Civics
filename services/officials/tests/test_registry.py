@@ -3,9 +3,7 @@ from pathlib import Path
 
 
 def test_registry_officials_include_portraits_and_parties() -> None:
-    path = (
-        Path(__file__).resolve().parent.parent / "registry" / "current-officials.json"
-    )
+    path = Path(__file__).resolve().parent.parent / "registry" / "officials.json"
     registry = json.loads(path.read_text(encoding="utf-8"))
 
     officials = [*registry["national"].values(), *registry["governors"].values()]

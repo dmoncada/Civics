@@ -1,1 +1,0 @@
-"""Current-officials Lambda service."""

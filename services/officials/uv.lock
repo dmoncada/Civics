@@ -195,7 +195,7 @@ wheels = [
 ]
 
 [[package]]
-name = "current-officials"
+name = "officials"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

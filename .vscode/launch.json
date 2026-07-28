@@ -11,7 +11,7 @@
       },
       "pathMappings": [
         {
-          "localRoot": "${workspaceFolder}/services/current-officials",
+          "localRoot": "${workspaceFolder}/services/officials",
           "remoteRoot": "/var/task"
         }
       ],

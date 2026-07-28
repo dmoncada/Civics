@@ -1,4 +1,4 @@
-# Civics current-officials service
+# Civics officials service
 
 The service supplies the changing answers in the USCIS civics question set. It does not accept
 addresses, coordinates, user identifiers, or accounts.
@@ -22,7 +22,7 @@ your AWS credentials, then call `src.api.lambda_handler(event, None)` from `uv r
 For example:
 
 ```sh
-CONGRESSIONAL_TABLE_NAME=current-officials \
+CONGRESSIONAL_TABLE_NAME=officials \
   uv run python -c 'from src.api import lambda_handler; print(lambda_handler({"queryStringParameters":{"jurisdiction":"WA"}}, None))'
 ```
 
@@ -34,7 +34,7 @@ file through `env_file: .env`.
 ## Local Lambda and DynamoDB
 
 Docker Compose runs the API Lambda Runtime Interface Emulator, DynamoDB Local, and a seed job.
-The seed job creates the `current-officials` table and inserts a deterministic Washington record.
+The seed job creates the `officials` table and inserts a deterministic Washington record.
 
 ```sh
 docker compose up --build
@@ -56,7 +56,7 @@ In another terminal, call the API directly. Query parameters are converted to th
 by SAM, so no Lambda invocation payload is needed:
 
 ```sh
-curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA'
+curl 'http://localhost:3000/api/v1/officials?jurisdiction=WA'
 ```
 
 The response contains all of the jurisdiction's representatives in `representatives`. Numbered
@@ -70,17 +70,17 @@ automatically.
 ### Debug the local API in VS Code
 
 Open the repository root in VS Code and install the Python extension. Set a breakpoint in
-`services/current-officials/src/api.py`, then start the debug-enabled local stack:
+`services/officials/src/api.py`, then start the debug-enabled local stack:
 
 ```sh
-cd services/current-officials
+cd services/officials
 make local-api-debug
 ```
 
 Invoke the endpoint in another terminal; it will wait for the debugger to attach:
 
 ```sh
-curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA'
+curl 'http://localhost:3000/api/v1/officials?jurisdiction=WA'
 ```
 
 Then choose **Run and Debug** > **Attach to SAM local API** in VS Code. The first request causes
@@ -102,7 +102,7 @@ docker compose --profile refresh up --build
 curl -X POST http://localhost:9001/2015-03-31/functions/function/invocations -d '{}'
 ```
 
-`registry/current-officials.json` is the reviewed record for the president, vice president,
+`registry/officials.json` is the reviewed record for the president, vice president,
 Speaker, Chief Justice, and governors. Each registry change must cite an official source in the
 pull request and update `as_of`. Congressional data is refreshed daily from Congress.gov and
 cached in DynamoDB.
@@ -154,7 +154,7 @@ only needs AWS CLI credentials.
    BUCKET="$(./scripts/boot.sh)"
    tofu -chdir=infra/domain init -reconfigure \
      -backend-config="bucket=$BUCKET" \
-     -backend-config='key=civics/current-officials/domain.tfstate' \
+     -backend-config='key=civics/officials/domain.tfstate' \
      -backend-config='region=us-west-2' \
      -backend-config='use_lockfile=true'
    tofu -chdir=infra/domain apply

@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Local HTTP entry point for the current-officials Lambda.
+Description: Local HTTP entry point for the officials Lambda.
 
 Resources:
-  CurrentOfficialsFunction:
+  OfficialsFunction:
     Type: AWS::Serverless::Function
     Metadata:
       DockerContext: .
       Dockerfile: Dockerfile
-      DockerTag: current-officials-local
+      DockerTag: officials-local
       DockerBuildArgs:
         SAM_LOCAL_DEBUG: "true"
     Properties:
@@ -19,10 +19,10 @@ Resources:
       Environment:
         Variables:
           DYNAMODB_ENDPOINT_URL: http://dynamodb:8000
-          CONGRESSIONAL_TABLE_NAME: current-officials
+          CONGRESSIONAL_TABLE_NAME: officials
       Events:
-        CurrentOfficials:
+        Officials:
           Type: Api
           Properties:
-            Path: /api/v1/current-officials
+            Path: /api/v1/officials
             Method: get

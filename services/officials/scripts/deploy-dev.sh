@@ -13,7 +13,7 @@ make -C "$root_dir" check test package
 
 tofu -chdir="$root_dir/infra" init -reconfigure \
   -backend-config="bucket=$bucket" \
-  -backend-config="key=civics/current-officials/dev.tfstate" \
+  -backend-config="key=civics/officials/dev.tfstate" \
   -backend-config="region=$region" \
   -backend-config="use_lockfile=true"
 

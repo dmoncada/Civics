@@ -13,13 +13,13 @@ if [[ -z "${PRODUCTION_CERTIFICATE_ARN:-}" ]]; then
   PRODUCTION_CERTIFICATE_ARN="$(tofu -chdir="$root_dir/infra/domain" output -raw certificate_arn)"
 fi
 
-if [[ -z "${CURRENT_OFFICIALS_TEST_KEY:-}" ]]; then
-  if CURRENT_OFFICIALS_TEST_KEY="$(aws ssm get-parameter --region "$region" \
-    --name /civics/prod/current-officials-test-key --with-decryption \
+if [[ -z "${OFFICIALS_TEST_KEY:-}" ]]; then
+  if OFFICIALS_TEST_KEY="$(aws ssm get-parameter --region "$region" \
+    --name /civics/prod/officials-test-key --with-decryption \
     --query 'Parameter.Value' --output text 2>/dev/null)"; then
     :
   else
-    CURRENT_OFFICIALS_TEST_KEY="$(openssl rand -base64 32)"
+    OFFICIALS_TEST_KEY="$(openssl rand -base64 32)"
     echo "Generated the initial production test key; retrieve it later from SSM." >&2
   fi
 fi
@@ -28,7 +28,7 @@ make -C "$root_dir" check test package
 
 tofu -chdir="$root_dir/infra" init -reconfigure \
   -backend-config="bucket=$bucket" \
-  -backend-config="key=civics/current-officials/prod.tfstate" \
+  -backend-config="key=civics/officials/prod.tfstate" \
   -backend-config="region=$region" \
   -backend-config="use_lockfile=true"
 
@@ -43,8 +43,8 @@ aws ssm put-parameter --region "$region" \
 
 aws ssm put-parameter --region "$region" \
   --overwrite --type SecureString \
-  --name /civics/prod/current-officials-test-key \
-  --value "$CURRENT_OFFICIALS_TEST_KEY" >/dev/null
+  --name /civics/prod/officials-test-key \
+  --value "$OFFICIALS_TEST_KEY" >/dev/null
 
 function_name="$(tofu -chdir="$root_dir/infra" output -raw refresh_function_name)"
 aws lambda invoke --region "$region" --function-name "$function_name" \

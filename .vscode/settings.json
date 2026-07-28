@@ -9,7 +9,7 @@
     "editor.formatOnSave": true
   },
 
-  "python.defaultInterpreterPath": "${workspaceFolder}/services/current-officials/.venv/bin/python",
+  "python.defaultInterpreterPath": "${workspaceFolder}/services/officials/.venv/bin/python",
   "python.languageServer": "Pylance",
   "ty.disableLanguageServices": true
 }

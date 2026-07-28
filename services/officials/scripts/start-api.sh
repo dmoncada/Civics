@@ -33,7 +33,7 @@ cleanup() {
     if [[ -n "$container_id" ]]; then
       network_container_ids+=("$container_id")
     fi
-  done < <(docker ps --quiet --all --filter network=current-officials_default)
+  done < <(docker ps --quiet --all --filter network=officials_default)
 
   if (( ${#network_container_ids[@]} > 0 )); then
     docker rm --force "${network_container_ids[@]}" 2> /dev/null || true
@@ -52,12 +52,12 @@ fi
 
 docker compose --profile refresh up --build --detach dynamodb seed refresh
 
-sam_args=(local start-api --docker-network current-officials_default)
+sam_args=(local start-api --docker-network officials_default)
 if [[ -n "${SAM_DEBUG_PORT:-}" ]]; then
   sam_args+=(
     --warm-containers lazy
     --debug-port "$SAM_DEBUG_PORT"
-    --debug-function CurrentOfficialsFunction
+    --debug-function OfficialsFunction
     --debug-args "/var/lang/bin/python3.13 -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:$SAM_DEBUG_PORT --wait-for-client /var/runtime/bootstrap.py"
   )
 fi
@@ -80,7 +80,7 @@ if [[ "$refresh_ready" != true ]]; then
   exit 1
 fi
 
-if ! kill -0 "$sam_pid" 2>/dev/null; then
+if ! kill -0 "$sam_pid" 2> /dev/null; then
   echo "SAM local API exited before refresh could run." >&2
   exit 1
 fi
@@ -90,6 +90,6 @@ curl --fail --silent --show-error --max-time 180 \
   -d '{}'
 
 echo
-echo "Refresh complete. Local API: http://localhost:3000/api/v1/current-officials"
+echo "Refresh complete. Local API: http://localhost:3000/api/v1/officials"
 
 wait "$sam_pid"

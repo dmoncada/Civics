@@ -1,6 +1,6 @@
 UV ?= uv
 DIST := dist
-PACKAGE := $(DIST)/current-officials.zip
+PACKAGE := $(DIST)/officials.zip
 
 .PHONY: test lint format check typecheck package local-api local-api-debug clean
 
@@ -29,7 +29,7 @@ package:
 		public.ecr.aws/lambda/python:3.13 \
 		install --no-cache-dir --requirement /asset/requirements.txt --target /asset/package
 	cp -R src registry $(DIST)/package/
-	cd $(DIST)/package && zip -qr ../current-officials.zip .
+	cd $(DIST)/package && zip -qr ../officials.zip .
 
 local-api:
 	./scripts/start-api.sh

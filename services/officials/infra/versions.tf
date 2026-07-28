@@ -9,7 +9,7 @@ terraform {
 
 provider "aws" {
   region = var.region
-  default_tags { tags = { Application = "civics-current-officials", Environment = var.environment, ManagedBy = "OpenTofu" } }
+  default_tags { tags = { Application = "civics-officials", Environment = var.environment, ManagedBy = "OpenTofu" } }
 }
 
 provider "cloudflare" { api_token = var.cloudflare_api_token }

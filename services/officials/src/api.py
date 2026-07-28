@@ -28,19 +28,19 @@ def lambda_handler(event: dict[str, Any], _context: object) -> dict[str, Any]:
         if not record:
             return _json(
                 503,
-                {"error": "Current officials are not available yet. Try again later."},
+                {"error": "Officials are not available yet. Try again later."},
             )
         return _json(200, make_response(record, REGISTRY))
     except Exception as error:  # noqa: BLE001 -- Lambda returns a safe 503 for any dependency failure.
         print(
             json.dumps(
                 {
-                    "message": "Unable to retrieve current officials",
+                    "message": "Unable to retrieve officials",
                     "error": type(error).__name__,
                 }
             )
         )
-        return _json(503, {"error": "Current officials are temporarily unavailable."})
+        return _json(503, {"error": "Officials are temporarily unavailable."})
 
 
 def _json(status_code: int, body: dict[str, Any]) -> dict[str, Any]:

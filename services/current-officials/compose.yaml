@@ -12,12 +12,7 @@ services:
     entrypoint: ["python", "docker/seed.py"]
     depends_on:
       - dynamodb
-    environment:
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
-      AWS_DEFAULT_REGION: us-west-2
-      CONGRESSIONAL_TABLE_NAME: current-officials
-      DYNAMODB_ENDPOINT_URL: http://dynamodb:8000
+    env_file: .env
     restart: "no"
 
   api:
@@ -27,12 +22,7 @@ services:
     depends_on:
       seed:
         condition: service_completed_successfully
-    environment:
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
-      AWS_DEFAULT_REGION: us-west-2
-      CONGRESSIONAL_TABLE_NAME: current-officials
-      DYNAMODB_ENDPOINT_URL: http://dynamodb:8000
+    env_file: .env
     ports:
       - "9000:8080"
 
@@ -45,12 +35,6 @@ services:
       seed:
         condition: service_completed_successfully
     env_file: .env
-    environment:
-      AWS_ACCESS_KEY_ID: local
-      AWS_SECRET_ACCESS_KEY: local
-      AWS_DEFAULT_REGION: us-west-2
-      CONGRESSIONAL_TABLE_NAME: current-officials
-      DYNAMODB_ENDPOINT_URL: http://dynamodb:8000
     ports:
       - "9001:8080"
     profiles: ["refresh"]

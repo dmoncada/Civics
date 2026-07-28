@@ -42,6 +42,27 @@ curl -X POST http://localhost:9000/2015-03-31/functions/function/invocations \
   -d '{"queryStringParameters":{"jurisdiction":"WA","district":"10"}}'
 ```
 
+### Local HTTP API with SAM
+
+SAM CLI exposes the same HTTP shape as the deployed API while Compose provides DynamoDB and
+performs one refresh from Congress.gov. Copy `.env.example` to `.env`, set `CONGRESS_API_KEY`,
+then run:
+
+```sh
+make local-api
+```
+
+In another terminal, call the API directly. Query parameters are converted to the Lambda event
+by SAM, so no Lambda invocation payload is needed:
+
+```sh
+curl 'http://localhost:3000/api/v1/current-officials?jurisdiction=WA&district=10'
+```
+
+`make local-api` starts Compose, builds and starts SAM, then invokes the refresh Lambda once.
+Stop it with `Ctrl-C`; the script stops SAM and runs `docker compose --profile refresh down`
+automatically.
+
 The API uses `DYNAMODB_ENDPOINT_URL` only when it is set; Compose sets it to the local DynamoDB
 container, while AWS Lambda continues to use DynamoDB's standard AWS endpoint. Stop the local
 environment with `docker compose down`.

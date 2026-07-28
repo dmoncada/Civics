@@ -2,7 +2,7 @@ UV ?= uv
 DIST := dist
 PACKAGE := $(DIST)/current-officials.zip
 
-.PHONY: test lint format check typecheck package clean
+.PHONY: test lint format check typecheck package local-api clean
 
 test:
 	$(UV) run pytest
@@ -30,6 +30,9 @@ package:
 		install --no-cache-dir --requirement /asset/requirements.txt --target /asset/package
 	cp -R src registry $(DIST)/package/
 	cd $(DIST)/package && zip -qr ../current-officials.zip .
+
+local-api:
+	./scripts/start-api.sh
 
 clean:
 	rm -rf $(DIST)

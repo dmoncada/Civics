@@ -15,7 +15,7 @@ COPY --from=requirements /build/requirements.txt ./
 RUN pip install --no-cache-dir --requirement requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 COPY src "${LAMBDA_TASK_ROOT}/src"
-COPY registry "${LAMBDA_TASK_ROOT}/registry"
 COPY docker "${LAMBDA_TASK_ROOT}/docker"
+COPY registry "${LAMBDA_TASK_ROOT}/registry"
 
 CMD ["src.api.lambda_handler"]
